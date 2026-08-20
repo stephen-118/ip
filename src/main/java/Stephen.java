@@ -1,8 +1,17 @@
 import java.util.Scanner;
 
 public class Stephen {
+    private static final int MAX_TASKS = 100;
+
+    /**
+     * Runs the chatbot and stores tasks entered during the current session.
+     *
+     * @param args command-line arguments; not used
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        String[] tasks = new String[MAX_TASKS];
+        int taskCount = 0;
 
         String line = "\n________________________________________________";
         String line1 = "Hello! I'm Stephen.";
@@ -24,9 +33,16 @@ public class Stephen {
             }
 
             System.out.println(line);
-            System.out.println(input);
+            if (input.equals("list")) {
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + tasks[i]);
+                }
+            } else {
+                tasks[taskCount] = input;
+                taskCount++;
+                System.out.println("added: " + input);
+            }
             System.out.println(line);
         }
-
     }
 }
