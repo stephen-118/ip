@@ -1,4 +1,4 @@
-# Level 4 UI Test Plan
+# Level 5 UI Test Plan
 
 ## Test protocol
 
@@ -114,3 +114,23 @@ OK, I've marked this task as not done yet:
 **Inputs:** `event festival /from when the gates open /to after the encore`, then `bye`.
 
 **Expected output:** The added task is `[E][ ] festival (from: when the gates open to: after the encore)`; all surrounding output matches the standard add session.
+
+## LEVEL5-01 — Handle invalid input and preserve state
+
+**Aim:** Verify that malformed commands show specific errors, do not terminate the chatbot,
+and do not change task state. Valid commands are interleaved with invalid commands.
+
+**Inputs:** Invalid and valid forms of `todo`, `deadline`, `event`, `mark`, `unmark`,
+and `delete`, followed by the unknown command `blah`, `list`, and `bye`. The exact sequence
+is recorded in `test/ui-test-cases.json` and includes missing descriptions and delimiters,
+empty date/time values, missing/non-numeric/zero/negative/out-of-range task numbers, and
+successful add, mark, unmark, and delete operations.
+
+**Expected output:** Every invalid command prints an `Oops!` message and the next command is
+still processed. The final list contains only the two valid tasks that were not deleted:
+
+```text
+Here are the tasks in your list:
+1.[D][ ] return book (by: Sunday)
+2.[E][ ] meeting (from: 2pm to: 4pm)
+```
