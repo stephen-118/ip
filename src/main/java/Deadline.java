@@ -11,12 +11,12 @@ public class Deadline extends Task {
      * @param by deadline text, stored without date parsing
      */
     public Deadline(String description, String by) {
-        super(description);
+        super(TaskType.DEADLINE, description);
         this.by = by;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return super.toString() + " (by: " + by + ")";
     }
 }
