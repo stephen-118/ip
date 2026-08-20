@@ -1,4 +1,4 @@
-# Level 5 UI Test Plan
+# Level 6 UI Test Plan
 
 ## Test protocol
 
@@ -134,3 +134,18 @@ Here are the tasks in your list:
 1.[D][ ] return book (by: Sunday)
 2.[E][ ] meeting (from: 2pm to: 4pm)
 ```
+
+## LEVEL6-01 — Delete tasks and preserve state after invalid deletes
+
+**Aim:** Verify deletion at every list position, automatic renumbering, deletion until the
+list is empty, and preservation of list state after rejected delete commands.
+
+**Inputs:** Add three todos; try `delete`, `delete abc`, `delete 0`, `delete -1`, and
+`delete 999`; list the tasks; delete task 2 and list; then delete task 1 twice, listing
+after each deletion; finally enter `bye`.
+
+**Expected output:** Each invalid command prints the existing specific task-number error,
+and the first list still contains all three tasks. Deleting task 2 removes `second task`
+and renumbers `third task` from 3 to 2. The following deletions remove the first task and
+then the remaining (last) task. The final list has no numbered task lines. Exact output is
+recorded in `test/ui-test-cases.json`.

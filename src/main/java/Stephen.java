@@ -1,7 +1,8 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Stephen {
-    private static final int MAX_TASKS = 100;
     private static final String SEPARATOR = "\n________________________________________________";
 
     /**
@@ -11,8 +12,7 @@ public class Stephen {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
+        List<Task> tasks = new ArrayList<>();
 
         System.out.println("Hello! I'm Stephen.");
         System.out.println("What can I do for you?");
@@ -32,49 +32,41 @@ public class Stephen {
             try {
                 if (input.equals("list")) {
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < taskCount; i++) {
-                        System.out.println((i + 1) + "." + tasks[i]);
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + "." + tasks.get(i));
                     }
                 } else if (input.equals("mark") || input.startsWith("mark ")) {
-                    int taskIndex = parseTaskIndex(input, "mark", taskCount);
-                    tasks[taskIndex].markAsDone();
+                    int taskIndex = parseTaskIndex(input, "mark", tasks.size());
+                    tasks.get(taskIndex).markAsDone();
                     System.out.println("Nice! I've marked this task as done:");
-                    System.out.println(tasks[taskIndex]);
+                    System.out.println(tasks.get(taskIndex));
                 } else if (input.equals("unmark") || input.startsWith("unmark ")) {
-                    int taskIndex = parseTaskIndex(input, "unmark", taskCount);
-                    tasks[taskIndex].markAsNotDone();
+                    int taskIndex = parseTaskIndex(input, "unmark", tasks.size());
+                    tasks.get(taskIndex).markAsNotDone();
                     System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println(tasks[taskIndex]);
+                    System.out.println(tasks.get(taskIndex));
                 } else if (input.equals("delete") || input.startsWith("delete ")) {
-                    int taskIndex = parseTaskIndex(input, "delete", taskCount);
-                    Task deletedTask = tasks[taskIndex];
-                    for (int i = taskIndex; i < taskCount - 1; i++) {
-                        tasks[i] = tasks[i + 1];
-                    }
-                    tasks[--taskCount] = null;
+                    int taskIndex = parseTaskIndex(input, "delete", tasks.size());
+                    Task deletedTask = tasks.remove(taskIndex);
                     System.out.println("Noted. I've removed this task:");
                     System.out.println("  " + deletedTask);
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                 } else if (input.equals("todo") || input.startsWith("todo ")) {
-                    ensureCapacity(taskCount);
                     String description = input.substring(4).trim();
                     if (description.isEmpty()) {
                         throw new ChatbotException("A todo needs a description. Try: todo borrow book");
                     }
-                    tasks[taskCount++] = new Todo(description);
-                    printAddedTask(tasks[taskCount - 1], taskCount);
+                    Task todo = new Todo(description);
+                    tasks.add(todo);
+                    printAddedTask(todo, tasks.size());
                 } else if (input.equals("deadline") || input.startsWith("deadline ")) {
-                    ensureCapacity(taskCount);
                     Deadline deadline = parseDeadline(input.substring(8).trim());
-                    tasks[taskCount] = deadline;
-                    taskCount++;
-                    printAddedTask(deadline, taskCount);
+                    tasks.add(deadline);
+                    printAddedTask(deadline, tasks.size());
                 } else if (input.equals("event") || input.startsWith("event ")) {
-                    ensureCapacity(taskCount);
                     Event event = parseEvent(input.substring(5).trim());
-                    tasks[taskCount] = event;
-                    taskCount++;
-                    printAddedTask(event, taskCount);
+                    tasks.add(event);
+                    printAddedTask(event, tasks.size());
                 } else {
                     throw new ChatbotException("I don't recognise that command.");
                 }
@@ -179,13 +171,6 @@ public class Stephen {
             index = details.indexOf(markerWithLeadingSpace, index + 1);
         }
         return -1;
-    }
-
-    /** Prevents an add command from exceeding the fixed task-list capacity. */
-    private static void ensureCapacity(int taskCount) throws ChatbotException {
-        if (taskCount >= MAX_TASKS) {
-            throw new ChatbotException("The task list is full. Delete a task before adding another.");
-        }
     }
 
     /**
