@@ -1,0 +1,256 @@
+[
+  {
+    "id": "LEVEL4-01",
+    "aim": "Add a todo",
+    "commands": [
+      "todo read book",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [T][ ] read book",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL4-02",
+    "aim": "Add a deadline",
+    "commands": [
+      "deadline return book /by Sunday",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [D][ ] return book (by: Sunday)",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL4-03",
+    "aim": "Add an event",
+    "commands": [
+      "event project meeting /from Mon 2pm /to 4pm",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [E][ ] project meeting (from: Mon 2pm to: 4pm)",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL4-04",
+    "aim": "List all three task types",
+    "commands": [
+      "todo read book",
+      "deadline return book /by Sunday",
+      "event project meeting /from Mon 2pm /to 4pm",
+      "list",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [T][ ] read book",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [D][ ] return book (by: Sunday)",
+      "Now you have 2 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [E][ ] project meeting (from: Mon 2pm to: 4pm)",
+      "Now you have 3 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Here are the tasks in your list:",
+      "1.[T][ ] read book",
+      "2.[D][ ] return book (by: Sunday)",
+      "3.[E][ ] project meeting (from: Mon 2pm to: 4pm)",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL4-05",
+    "aim": "Mark a task",
+    "commands": [
+      "todo read book",
+      "mark 1",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [T][ ] read book",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Nice! I've marked this task as done:",
+      "[T][X] read book",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL4-06",
+    "aim": "Unmark a task",
+    "commands": [
+      "todo read book",
+      "mark 1",
+      "unmark 1",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [T][ ] read book",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Nice! I've marked this task as done:",
+      "[T][X] read book",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "OK, I've marked this task as not done yet:",
+      "[T][ ] read book",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL4-07",
+    "aim": "Accept an arbitrary deadline date",
+    "commands": [
+      "deadline submit report /by sometime after lunch-ish",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [D][ ] submit report (by: sometime after lunch-ish)",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL4-08",
+    "aim": "Accept arbitrary event dates",
+    "commands": [
+      "event festival /from when the gates open /to after the encore",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Got it. I've added this task:",
+      "  [E][ ] festival (from: when the gates open to: after the encore)",
+      "Now you have 1 tasks in the list.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  }
+]

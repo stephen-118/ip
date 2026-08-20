@@ -29,6 +29,13 @@ Unless the user says otherwise, assume that you are assisting a student working 
 Ensure that Java 25 is used when running the application or build tasks.
 The development environment is Windows with IntelliJ IDEA. Ensure that the IntelliJ Project SDK is configured to use Java 25.
 
+## UI testing
+
+After each application code update:
+
+1. Update `test/ui-test-plan.md` and `test/ui-test-cases.json` when the changed behavior requires new or revised UI test coverage.
+2. Invoke the project-specific `test-ui` skill and report its console-session result. Stop at the first failed test as directed by the skill.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
