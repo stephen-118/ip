@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 /** Tests the date-matching business rules for scheduled task types. */
 class DatedTaskTest {
     @Test
-    void deadlineOccursOn_onlyExactDueDateMatches() {
+    void deadlineOccursOnOnlyExactDueDateMatches() {
         Deadline deadline = new Deadline("submit", LocalDate.of(2024, 6, 15));
 
         assertFalse(deadline.occursOn(LocalDate.of(2024, 6, 14)));
@@ -19,7 +19,7 @@ class DatedTaskTest {
     }
 
     @Test
-    void eventOccursOn_multiDayRangeIncludesBothBoundaries() {
+    void eventOccursOnMultiDayRangeIncludesBothBoundaries() {
         Event event = new Event("conference",
                 LocalDate.of(2024, 6, 10), LocalDate.of(2024, 6, 12));
 
@@ -31,7 +31,7 @@ class DatedTaskTest {
     }
 
     @Test
-    void eventOccursOn_singleDayRange_matchesOnlyThatDay() {
+    void eventOccursOnSingleDayRangeMatchesOnlyThatDay() {
         LocalDate date = LocalDate.of(2024, 6, 10);
         Event event = new Event("one-day event", date, date);
 
