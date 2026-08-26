@@ -3,6 +3,49 @@ import java.time.format.DateTimeParseException;
 
 /** Interprets user input and validates command arguments. */
 public class Parser {
+    /**
+     * Interprets one input line and creates the command that should handle it.
+     *
+     * @param input complete trimmed user input
+     * @param tasks current task list, used to validate task numbers
+     * @return command representing the input
+     * @throws ChatbotException if the command or its arguments are invalid
+     */
+    public Command parse(String input, TaskList tasks) throws ChatbotException {
+        String command = getCommand(input);
+        String arguments = getArguments(input);
+
+        switch (command) {
+        case "bye":
+            if (arguments.isEmpty()) {
+                return new ExitCommand();
+            }
+            break;
+        case "list":
+            if (arguments.isEmpty()) {
+                return new ListCommand();
+            }
+            break;
+        case "schedule":
+            return new ScheduleCommand(parseScheduleDate(arguments));
+        case "mark":
+            return new MarkCommand(parseTaskIndex(arguments, command, tasks.size()));
+        case "unmark":
+            return new UnmarkCommand(parseTaskIndex(arguments, command, tasks.size()));
+        case "delete":
+            return new DeleteCommand(parseTaskIndex(arguments, command, tasks.size()));
+        case "todo":
+            return new AddCommand(parseTodo(arguments));
+        case "deadline":
+            return new AddCommand(parseDeadline(arguments));
+        case "event":
+            return new AddCommand(parseEvent(arguments));
+        default:
+            break;
+        }
+        throw new ChatbotException("I don't recognise that command.");
+    }
+
     /** Returns the first word of the input as the command name. */
     public String getCommand(String input) {
         int firstSpace = input.indexOf(' ');
