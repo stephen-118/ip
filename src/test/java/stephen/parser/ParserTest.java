@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import stephen.command.AddCommand;
 import stephen.command.DeleteCommand;
 import stephen.command.ExitCommand;
+import stephen.command.FindCommand;
 import stephen.command.ListCommand;
 import stephen.command.MarkCommand;
 import stephen.command.ScheduleCommand;
@@ -32,6 +33,7 @@ class ParserTest {
         assertInstanceOf(ExitCommand.class, parser.parse("bye", tasks));
         assertInstanceOf(ListCommand.class, parser.parse("list", tasks));
         assertInstanceOf(ScheduleCommand.class, parser.parse("schedule 2024-02-29", tasks));
+        assertInstanceOf(FindCommand.class, parser.parse("find read book", tasks));
         assertInstanceOf(MarkCommand.class, parser.parse("mark 1", tasks));
         assertInstanceOf(UnmarkCommand.class, parser.parse("unmark 1", tasks));
         assertInstanceOf(DeleteCommand.class, parser.parse("delete 1", tasks));
@@ -131,6 +133,17 @@ class ParserTest {
         assertThrows(ChatbotException.class, () -> parser.parseScheduleDate(""));
         assertThrows(ChatbotException.class, () -> parser.parseScheduleDate("2023-02-29"));
         assertThrows(ChatbotException.class, () -> parser.parseScheduleDate("29-02-2024"));
+    }
+
+    @Test
+    void parseFindKeyword_multiWordPhrasePreserved_missingKeywordRejected()
+            throws ChatbotException {
+        assertEquals("read book", parser.parseFindKeyword("read book"));
+        assertMessage("Please provide a search keyword. Try: find book",
+                assertThrows(ChatbotException.class, () -> parser.parseFindKeyword("")));
+        assertMessage("Please provide a search keyword. Try: find book",
+                assertThrows(ChatbotException.class,
+                        () -> parser.parse("find", new TaskList(java.util.List.of()))));
     }
 
     /** Checks an exact user-facing validation message. */
