@@ -1,4 +1,4 @@
-# Level 6 UI Test Plan
+# Level 7 UI Test Plan
 
 ## Test protocol
 
@@ -144,8 +144,18 @@ list is empty, and preservation of list state after rejected delete commands.
 `delete 999`; list the tasks; delete task 2 and list; then delete task 1 twice, listing
 after each deletion; finally enter `bye`.
 
+Successful additions and deletions also exercise the new automatic-save path. Saving is
+intentionally silent, so the expected console output remains unchanged.
+
 **Expected output:** Each invalid command prints the existing specific task-number error,
 and the first list still contains all three tasks. Deleting task 2 removes `second task`
 and renumbers `third task` from 3 to 2. The following deletions remove the first task and
 then the remaining (last) task. The final list has no numbered task lines. Exact output is
 recorded in `test/ui-test-cases.json`.
+
+## Level 7 storage test
+
+`StorageTest` verifies the non-UI persistence behavior directly. It checks serialization
+of Todo, Deadline, and Event tasks (including completion status and escaped delimiters),
+automatic parent-directory creation, and replacement of the file after status and list
+changes.

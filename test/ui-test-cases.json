@@ -465,7 +465,7 @@
   },
   {
     "id": "LEVEL6-01",
-    "aim": "Delete first, middle, and last tasks while rejecting invalid indexes without changing state",
+    "aim": "Delete first, middle, and last tasks, saving each successful list change while rejecting invalid indexes",
     "commands": [
       "todo first task",
       "todo second task",

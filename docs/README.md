@@ -20,6 +20,22 @@ Example: `keyword (optional arguments)`
 expected output
 ```
 
+## Saving tasks
+
+Stephen automatically saves the task list after every successful `todo`, `deadline`,
+`event`, `delete`, `mark`, and `unmark` command. Data is stored relative to the project
+folder in `data/stephen.txt`; the `data` folder is created automatically.
+
+Each line uses `type | completion | description | task-specific fields`. Completion is
+`1` for done and `0` for not done. Pipes, backslashes, and line breaks inside values are
+escaped with a backslash. For example:
+
+```text
+T | 0 | read book
+D | 1 | submit report | Friday
+E | 0 | project meeting | Mon 2pm | Mon 4pm
+```
+
 ## Feature ABC
 
 // Feature details
