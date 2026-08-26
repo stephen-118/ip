@@ -1,6 +1,7 @@
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,44 +27,47 @@ public class StorageTest {
         assertTaskData(storage.load(), List.of());
 
         Todo todo = new Todo("read | revise\\notes");
-        Deadline deadline = new Deadline("submit report", "Friday");
-        Event event = new Event("project meeting", "Mon 2pm", "Mon 4pm");
+        Deadline deadline = new Deadline("submit report", LocalDate.of(2019, 12, 2));
+        Event event = new Event("project meeting",
+                LocalDate.of(2019, 12, 2), LocalDate.of(2019, 12, 3));
         deadline.markAsDone();
 
         List<Task> tasks = new ArrayList<>(List.of(todo, deadline, event));
         storage.save(tasks);
         assertLines(dataFile, List.of(
                 "T | 0 | read \\| revise\\\\notes",
-                "D | 1 | submit report | Friday",
-                "E | 0 | project meeting | Mon 2pm | Mon 4pm"));
+                "D | 1 | submit report | 2019-12-02",
+                "E | 0 | project meeting | 2019-12-02 | 2019-12-03"));
         assertTaskData(storage.load(), List.of(
                 "T | 0 | read \\| revise\\\\notes",
-                "D | 1 | submit report | Friday",
-                "E | 0 | project meeting | Mon 2pm | Mon 4pm"));
+                "D | 1 | submit report | 2019-12-02",
+                "E | 0 | project meeting | 2019-12-02 | 2019-12-03"));
 
         todo.markAsDone();
         tasks.remove(deadline);
         storage.save(tasks);
         assertLines(dataFile, List.of(
                 "T | 1 | read \\| revise\\\\notes",
-                "E | 0 | project meeting | Mon 2pm | Mon 4pm"));
+                "E | 0 | project meeting | 2019-12-02 | 2019-12-03"));
         assertTaskData(storage.load(), List.of(
                 "T | 1 | read \\| revise\\\\notes",
-                "E | 0 | project meeting | Mon 2pm | Mon 4pm"));
+                "E | 0 | project meeting | 2019-12-02 | 2019-12-03"));
 
         Files.write(dataFile, List.of(
                 "",
                 "not a task",
                 "T | 0 | valid todo",
-                "D | maybe | invalid status | Friday",
-                "D | 1 | valid deadline | tomorrow",
-                "E | 0 | missing end | noon",
-                "E | 1 | valid event | 2pm | 4pm",
+                "D | maybe | invalid status | 2019-12-02",
+                "D | 1 | invalid deadline | tomorrow",
+                "D | 1 | valid deadline | 2020-02-29",
+                "E | 0 | missing end | 2019-12-02",
+                "E | 1 | invalid event | 2pm | 4pm",
+                "E | 1 | valid event | 2019-12-02 | 2019-12-03",
                 "T | 0 | broken escape\\q"), StandardCharsets.UTF_8);
         assertTaskData(storage.load(), List.of(
                 "T | 0 | valid todo",
-                "D | 1 | valid deadline | tomorrow",
-                "E | 1 | valid event | 2pm | 4pm"));
+                "D | 1 | valid deadline | 2020-02-29",
+                "E | 1 | valid event | 2019-12-02 | 2019-12-03"));
 
         System.out.println("StorageTest: all checks passed");
     }

@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -127,7 +129,8 @@ public class Stephen {
     private static Deadline parseDeadline(String details) throws ChatbotException {
         if (details.isEmpty()) {
             throw new ChatbotException(
-                    "A deadline needs a description and '/by'. Try: deadline return book /by Sunday");
+                    "A deadline needs a description and '/by'. "
+                            + "Try: deadline return book /by 2019-12-02");
         }
         if (details.equals("/by") || details.startsWith("/by ")) {
             throw new ChatbotException("A deadline needs a description before '/by'.");
@@ -135,7 +138,7 @@ public class Stephen {
         int byIndex = findMarker(details, "/by", 0);
         if (byIndex < 0) {
             throw new ChatbotException(
-                    "A deadline needs '/by'. Try: deadline return book /by Sunday");
+                    "A deadline needs '/by'. Try: deadline return book /by 2019-12-02");
         }
         String description = details.substring(0, byIndex).trim();
         String by = details.substring(byIndex + 4).trim();
@@ -143,9 +146,14 @@ public class Stephen {
             throw new ChatbotException("A deadline needs a description before '/by'.");
         }
         if (by.isEmpty()) {
-            throw new ChatbotException("A deadline needs a time after '/by'. Try: /by Sunday");
+            throw new ChatbotException("A deadline needs a date after '/by'. Try: /by 2019-12-02");
         }
-        return new Deadline(description, by);
+        try {
+            return new Deadline(description, LocalDate.parse(by, Task.INPUT_DATE_FORMAT));
+        } catch (DateTimeParseException e) {
+            throw new ChatbotException("Invalid deadline date. Please use yyyy-MM-dd, "
+                    + "for example 2019-12-02.");
+        }
     }
 
     /** Parses an event while checking its description, start, and end values. */
@@ -153,7 +161,7 @@ public class Stephen {
         if (details.isEmpty()) {
             throw new ChatbotException(
                     "An event needs a description, '/from', and '/to'. "
-                            + "Try: event meeting /from 2pm /to 4pm");
+                            + "Try: event meeting /from 2019-12-02 /to 2019-12-03");
         }
         if (details.equals("/from") || details.startsWith("/from ")) {
             throw new ChatbotException("An event needs a description before '/from'.");
@@ -161,12 +169,14 @@ public class Stephen {
         int fromIndex = findMarker(details, "/from", 0);
         if (fromIndex < 0) {
             throw new ChatbotException(
-                    "An event needs '/from'. Try: event meeting /from 2pm /to 4pm");
+                    "An event needs '/from'. "
+                            + "Try: event meeting /from 2019-12-02 /to 2019-12-03");
         }
         int toIndex = findMarker(details, "/to", fromIndex + 6);
         if (toIndex < 0) {
             throw new ChatbotException(
-                    "An event needs '/to'. Try: event meeting /from 2pm /to 4pm");
+                    "An event needs '/to'. "
+                            + "Try: event meeting /from 2019-12-02 /to 2019-12-03");
         }
         String description = details.substring(0, fromIndex).trim();
         String from = details.substring(fromIndex + 6, toIndex).trim();
@@ -175,12 +185,19 @@ public class Stephen {
             throw new ChatbotException("An event needs a description before '/from'.");
         }
         if (from.isEmpty()) {
-            throw new ChatbotException("An event needs a start time after '/from'.");
+            throw new ChatbotException("An event needs a start date after '/from'.");
         }
         if (to.isEmpty()) {
-            throw new ChatbotException("An event needs an end time after '/to'.");
+            throw new ChatbotException("An event needs an end date after '/to'.");
         }
-        return new Event(description, from, to);
+        try {
+            return new Event(description,
+                    LocalDate.parse(from, Task.INPUT_DATE_FORMAT),
+                    LocalDate.parse(to, Task.INPUT_DATE_FORMAT));
+        } catch (DateTimeParseException e) {
+            throw new ChatbotException("Invalid event date. Please use yyyy-MM-dd for both dates, "
+                    + "for example /from 2019-12-02 /to 2019-12-03.");
+        }
     }
 
     /**

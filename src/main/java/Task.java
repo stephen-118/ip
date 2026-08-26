@@ -1,7 +1,15 @@
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+import java.util.Locale;
+
 /**
  * Represents a task with a description and completion status.
  */
 public class Task {
+    protected static final DateTimeFormatter INPUT_DATE_FORMAT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
+    protected static final DateTimeFormatter DISPLAY_DATE_FORMAT =
+            DateTimeFormatter.ofPattern("MMM d uuuu", Locale.ENGLISH);
     protected final TaskType type;
     protected String description;
     protected boolean isDone;

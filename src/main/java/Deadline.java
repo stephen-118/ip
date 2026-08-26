@@ -1,27 +1,29 @@
+import java.time.LocalDate;
+
 /**
  * Represents a task that must be completed by a specified date or time.
  */
 public class Deadline extends Task {
-    private final String by;
+    private final LocalDate by;
 
     /**
      * Creates an incomplete deadline.
      *
      * @param description description of the task
-     * @param by deadline text, stored without date parsing
+     * @param by deadline date
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDate by) {
         super(TaskType.DEADLINE, description);
         this.by = by;
     }
 
     @Override
     public String toDataString() {
-        return super.toDataString() + " | " + escape(by);
+        return super.toDataString() + " | " + by.format(INPUT_DATE_FORMAT);
     }
 
     @Override
     public String toString() {
-        return super.toString() + " (by: " + by + ")";
+        return super.toString() + " (by: " + by.format(DISPLAY_DATE_FORMAT) + ")";
     }
 }

@@ -1,4 +1,4 @@
-# Level 7 UI Test Plan
+# Level 8 UI Test Plan
 
 ## Test protocol
 
@@ -46,19 +46,19 @@ ________________________________________________
 
 ## LEVEL4-02 — Add a deadline
 
-**Aim:** Verify that a deadline is added with its description and date string.
+**Aim:** Verify that a valid ISO deadline date is parsed and displayed as `Dec 2 2019`.
 
-**Inputs:** `deadline return book /by Sunday`, then `bye`.
+**Inputs:** `deadline return book /by 2019-12-02`, then `bye`.
 
-**Expected output:** Same greeting, separators, count, and farewell as LEVEL4-01; the added task line is `[D][ ] return book (by: Sunday)`.
+**Expected output:** Same greeting, separators, count, and farewell as LEVEL4-01; the added task line is `[D][ ] return book (by: Dec 2 2019)`.
 
 ## LEVEL4-03 — Add an event
 
 **Aim:** Verify that an event is added with its description and time string.
 
-**Inputs:** `event project meeting /from Mon 2pm /to 4pm`, then `bye`.
+**Inputs:** `event project meeting /from 2019-12-02 /to 2019-12-03`, then `bye`.
 
-**Expected output:** Same greeting, separators, count, and farewell as LEVEL4-01; the added task line is `[E][ ] project meeting (from: Mon 2pm to: 4pm)`.
+**Expected output:** Same greeting, separators, count, and farewell as LEVEL4-01; the added task line is `[E][ ] project meeting (from: Dec 2 2019 to: Dec 3 2019)`.
 
 ## LEVEL4-04 — List all three task types
 
@@ -103,17 +103,17 @@ OK, I've marked this task as not done yet:
 [T][ ] read book
 ```
 
-## LEVEL4-07 — Accept an arbitrary deadline date
+## LEVEL4-07 — Reject an invalid deadline date format
 
-**Aim:** Verify that deadline dates are stored as arbitrary strings rather than parsed as a fixed date format.
+**Aim:** Verify that a non-ISO deadline date produces a clear `yyyy-MM-dd` error.
 
 **Inputs:** `deadline submit report /by sometime after lunch-ish`, then `bye`.
 
 **Expected output:** The added task is `[D][ ] submit report (by: sometime after lunch-ish)`; all surrounding output matches the standard add session.
 
-## LEVEL4-08 — Accept arbitrary event dates
+## LEVEL4-08 — Reject a nonexistent event date
 
-**Aim:** Verify that event start and end values are stored as arbitrary strings rather than parsed as fixed date formats.
+**Aim:** Verify that strict parsing rejects `2019-02-29` and keeps the program running.
 
 **Inputs:** `event festival /from when the gates open /to after the encore`, then `bye`.
 
@@ -162,7 +162,8 @@ recorded in `test/ui-test-cases.json`.
 `StorageTest` verifies the non-UI persistence behavior directly. It checks serialization
 of Todo, Deadline, and Event tasks (including completion status and escaped delimiters),
 automatic parent-directory creation, and replacement of the file after status and list
-changes.
+changes. For Level 8 it also checks ISO date persistence and reload, while invalid saved
+date values are skipped as malformed records.
 
 ## LEVEL7-01 — Load saved tasks and tolerate corrupted records
 

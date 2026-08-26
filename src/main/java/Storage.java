@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class Storage {
             }
             try {
                 tasks.add(parseTask(line));
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | DateTimeParseException e) {
                 // Skip only the corrupted record so other saved tasks can still load.
             }
         }
@@ -79,10 +81,13 @@ public class Storage {
         if (type.equals("T") && fields.size() == 3) {
             task = new Todo(description);
         } else if (type.equals("D") && fields.size() == 4 && !fields.get(3).isEmpty()) {
-            task = new Deadline(description, fields.get(3));
+            task = new Deadline(description,
+                    LocalDate.parse(fields.get(3), Task.INPUT_DATE_FORMAT));
         } else if (type.equals("E") && fields.size() == 5
                 && !fields.get(3).isEmpty() && !fields.get(4).isEmpty()) {
-            task = new Event(description, fields.get(3), fields.get(4));
+            task = new Event(description,
+                    LocalDate.parse(fields.get(3), Task.INPUT_DATE_FORMAT),
+                    LocalDate.parse(fields.get(4), Task.INPUT_DATE_FORMAT));
         } else {
             throw new IllegalArgumentException("Invalid task type or field count");
         }
