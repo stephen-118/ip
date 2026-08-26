@@ -1,5 +1,10 @@
+package stephen.ui;
+
 import java.time.LocalDate;
 import java.util.Scanner;
+
+import stephen.task.Task;
+import stephen.task.TaskList;
 
 /** Reads user input and displays all console output for Stephen. */
 public class Ui {

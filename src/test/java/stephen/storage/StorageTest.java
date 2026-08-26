@@ -1,9 +1,16 @@
+package stephen.storage;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import stephen.task.Deadline;
+import stephen.task.Event;
+import stephen.task.Task;
+import stephen.task.Todo;
 
 /** Automated checks for task serialization, saving, and loading. */
 public class StorageTest {

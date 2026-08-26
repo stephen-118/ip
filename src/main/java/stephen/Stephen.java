@@ -1,6 +1,16 @@
+package stephen;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+
+import stephen.command.Command;
+import stephen.exception.ChatbotException;
+import stephen.parser.Parser;
+import stephen.storage.Storage;
+import stephen.task.Task;
+import stephen.task.TaskList;
+import stephen.ui.Ui;
 
 public class Stephen {
     private static final Path DATA_FILE = Path.of("data", "stephen.txt");

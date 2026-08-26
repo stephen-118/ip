@@ -1,3 +1,5 @@
+package stephen.task;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -7,9 +9,11 @@ import java.util.Locale;
  * Represents a task with a description and completion status.
  */
 public class Task {
-    protected static final DateTimeFormatter INPUT_DATE_FORMAT =
+    /** Strict ISO date format accepted in commands and used in saved task data. */
+    public static final DateTimeFormatter INPUT_DATE_FORMAT =
             DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
-    protected static final DateTimeFormatter DISPLAY_DATE_FORMAT =
+    /** Friendly date format used when displaying dated tasks to the user. */
+    public static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM d uuuu", Locale.ENGLISH);
     protected final TaskType type;
     protected String description;

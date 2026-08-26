@@ -1,9 +1,18 @@
+package stephen.command;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import stephen.exception.ChatbotException;
+import stephen.parser.Parser;
+import stephen.storage.Storage;
+import stephen.task.Task;
+import stephen.task.TaskList;
+import stephen.ui.Ui;
 
 /** Automated checks for command parsing, execution, and exit signaling. */
 public class CommandTest {

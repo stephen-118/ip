@@ -1,4 +1,11 @@
+package stephen.command;
+
 import java.io.IOException;
+
+import stephen.exception.ChatbotException;
+import stephen.storage.Storage;
+import stephen.task.TaskList;
+import stephen.ui.Ui;
 
 /** Represents one parsed user command that can be executed by the application. */
 public abstract class Command {

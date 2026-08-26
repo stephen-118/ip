@@ -1,3 +1,11 @@
+package stephen.command;
+
+import stephen.exception.ChatbotException;
+import stephen.storage.Storage;
+import stephen.task.Task;
+import stephen.task.TaskList;
+import stephen.ui.Ui;
+
 /** Marks one task as done. */
 public class MarkCommand extends Command {
     private final int taskIndex;

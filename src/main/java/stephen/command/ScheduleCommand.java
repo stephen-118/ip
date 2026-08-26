@@ -1,4 +1,10 @@
+package stephen.command;
+
 import java.time.LocalDate;
+
+import stephen.storage.Storage;
+import stephen.task.TaskList;
+import stephen.ui.Ui;
 
 /** Displays tasks occurring on one date. */
 public class ScheduleCommand extends Command {

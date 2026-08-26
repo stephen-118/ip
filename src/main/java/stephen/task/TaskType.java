@@ -1,3 +1,5 @@
+package stephen.task;
+
 /**
  * Represents the fixed types of tasks supported by the chatbot.
  */

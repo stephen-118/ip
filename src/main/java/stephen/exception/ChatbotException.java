@@ -1,3 +1,5 @@
+package stephen.exception;
+
 /**
  * Represents an error caused by an invalid chatbot command or user input.
  */

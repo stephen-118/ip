@@ -1,3 +1,5 @@
+package stephen.storage;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -6,6 +8,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import stephen.task.Deadline;
+import stephen.task.Event;
+import stephen.task.Task;
+import stephen.task.Todo;
 
 /** Loads and saves the task list on disk. */
 public class Storage {

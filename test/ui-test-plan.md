@@ -2,7 +2,7 @@
 
 ## Test protocol
 
-- Main class: `Stephen`
+- Main class: `stephen.Stephen`
 - Java version: 25
 - Compile destination: `out/ui-test`
 - Machine-readable cases: `test/ui-test-cases.json`
