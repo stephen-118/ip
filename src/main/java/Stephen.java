@@ -48,6 +48,9 @@ public class Stephen {
                     for (int i = 0; i < tasks.size(); i++) {
                         System.out.println((i + 1) + "." + tasks.get(i));
                     }
+                } else if (input.equals("schedule") || input.startsWith("schedule ")) {
+                    LocalDate date = parseScheduleDate(input.substring(8).trim());
+                    printSchedule(tasks, date);
                 } else if (input.equals("mark") || input.startsWith("mark ")) {
                     int taskIndex = parseTaskIndex(input, "mark", tasks.size());
                     tasks.get(taskIndex).markAsDone();
@@ -123,6 +126,39 @@ public class Stephen {
             throw new ChatbotException("That task number does not exist.");
         }
         return taskNumber - 1;
+    }
+
+    /** Parses the date supplied to the schedule command. */
+    private static LocalDate parseScheduleDate(String dateText) throws ChatbotException {
+        if (dateText.isEmpty()) {
+            throw new ChatbotException(
+                    "Please provide a schedule date. Try: schedule 2019-12-02");
+        }
+        try {
+            return LocalDate.parse(dateText, Task.INPUT_DATE_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new ChatbotException("Invalid schedule date. Please use yyyy-MM-dd, "
+                    + "for example 2019-12-02.");
+        }
+    }
+
+    /** Displays dated tasks occurring on the requested date. */
+    private static void printSchedule(List<Task> tasks, LocalDate date) {
+        boolean hasMatches = false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).occursOn(date)) {
+                if (!hasMatches) {
+                    System.out.println("Here are the tasks occurring on "
+                            + date.format(Task.DISPLAY_DATE_FORMAT) + ":");
+                    hasMatches = true;
+                }
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
+        }
+        if (!hasMatches) {
+            System.out.println("There are no deadlines or events on "
+                    + date.format(Task.DISPLAY_DATE_FORMAT) + ".");
+        }
     }
 
     /** Parses a deadline while checking its description and {@code /by} value. */

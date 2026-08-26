@@ -18,6 +18,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public boolean occursOn(LocalDate date) {
+        return by.equals(date);
+    }
+
+    @Override
     public String toDataString() {
         return super.toDataString() + " | " + by.format(INPUT_DATE_FORMAT);
     }

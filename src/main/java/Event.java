@@ -21,6 +21,11 @@ public class Event extends Task {
     }
 
     @Override
+    public boolean occursOn(LocalDate date) {
+        return !date.isBefore(from) && !date.isAfter(to);
+    }
+
+    @Override
     public String toDataString() {
         return super.toDataString() + " | " + from.format(INPUT_DATE_FORMAT)
                 + " | " + to.format(INPUT_DATE_FORMAT);
