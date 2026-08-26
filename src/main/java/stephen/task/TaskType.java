@@ -4,8 +4,11 @@ package stephen.task;
  * Represents the fixed types of tasks supported by the chatbot.
  */
 public enum TaskType {
+    /** Task without an attached date. */
     TODO("T"),
+    /** Task due on a particular date. */
     DEADLINE("D"),
+    /** Task occurring over a date range. */
     EVENT("E");
 
     private final String symbol;

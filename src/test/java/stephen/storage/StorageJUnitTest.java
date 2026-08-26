@@ -23,6 +23,7 @@ class StorageJUnitTest {
     @TempDir
     Path tempDirectory;
 
+    /** Verifies that loading a missing file has no filesystem side effects. */
     @Test
     void load_missingFile_returnsEmptyListWithoutCreatingFile() throws IOException {
         Path dataFile = tempDirectory.resolve("missing").resolve("tasks.txt");
@@ -32,6 +33,7 @@ class StorageJUnitTest {
         assertFalse(Files.exists(dataFile.getParent()));
     }
 
+    /** Verifies lossless persistence of all task types and escaped content. */
     @Test
     void saveAndLoad_allTaskTypesStatusEscapesAndDuplicates_roundTrip() throws IOException {
         Path dataFile = tempDirectory.resolve("nested").resolve("tasks.txt");
@@ -52,6 +54,7 @@ class StorageJUnitTest {
                 serialized(storage.load()));
     }
 
+    /** Verifies that saving an empty list clears existing file contents. */
     @Test
     void save_emptyList_replacesExistingContents() throws IOException {
         Path dataFile = tempDirectory.resolve("tasks.txt");
@@ -64,6 +67,7 @@ class StorageJUnitTest {
         assertEquals(List.of(), Files.readAllLines(dataFile, StandardCharsets.UTF_8));
     }
 
+    /** Verifies that malformed records are skipped without discarding valid records. */
     @Test
     void load_blankAndMalformedRecords_skipsOnlyBadLines() throws IOException {
         Path dataFile = tempDirectory.resolve("tasks.txt");
@@ -85,7 +89,12 @@ class StorageJUnitTest {
                 serialized(new Storage(dataFile).load()));
     }
 
-    /** Converts tasks to their stable persisted representation for exact comparison. */
+    /**
+     * Converts tasks to their stable persisted representation for exact comparison.
+     *
+     * @param tasks tasks to serialize
+     * @return serialized task records in list order
+     */
     private static List<String> serialized(List<Task> tasks) {
         return tasks.stream().map(Task::toDataString).toList();
     }

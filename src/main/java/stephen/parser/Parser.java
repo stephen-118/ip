@@ -20,6 +20,10 @@ import stephen.task.Todo;
 
 /** Interprets user input and validates command arguments. */
 public class Parser {
+    /** Creates a parser for Stephen's supported commands. */
+    public Parser() {
+    }
+
     /**
      * Interprets one input line and creates the command that should handle it.
      *
@@ -63,19 +67,35 @@ public class Parser {
         throw new ChatbotException("I don't recognise that command.");
     }
 
-    /** Returns the first word of the input as the command name. */
+    /**
+     * Returns the first word of the input as the command name.
+     *
+     * @param input complete user input
+     * @return command name, or an empty string when the input is empty
+     */
     public String getCommand(String input) {
         int firstSpace = input.indexOf(' ');
         return firstSpace < 0 ? input : input.substring(0, firstSpace);
     }
 
-    /** Returns the text following the command name, with surrounding whitespace removed. */
+    /**
+     * Returns the text following the command name, with surrounding whitespace removed.
+     *
+     * @param input complete user input
+     * @return trimmed command arguments, or an empty string when none are present
+     */
     public String getArguments(String input) {
         int firstSpace = input.indexOf(' ');
         return firstSpace < 0 ? "" : input.substring(firstSpace + 1).trim();
     }
 
-    /** Parses a todo description. */
+    /**
+     * Parses a todo description.
+     *
+     * @param description todo description
+     * @return todo containing the supplied description
+     * @throws ChatbotException if the description is empty
+     */
     public Todo parseTodo(String description) throws ChatbotException {
         if (description.isEmpty()) {
             throw new ChatbotException("A todo needs a description. Try: todo borrow book");
@@ -83,7 +103,13 @@ public class Parser {
         return new Todo(description);
     }
 
-    /** Parses a deadline while checking its description and {@code /by} value. */
+    /**
+     * Parses a deadline while checking its description and {@code /by} value.
+     *
+     * @param details deadline description and date arguments
+     * @return deadline represented by the arguments
+     * @throws ChatbotException if required arguments are missing or the date is invalid
+     */
     public Deadline parseDeadline(String details) throws ChatbotException {
         if (details.isEmpty()) {
             throw new ChatbotException(
@@ -114,7 +140,13 @@ public class Parser {
         }
     }
 
-    /** Parses an event while checking its description, start, and end values. */
+    /**
+     * Parses an event while checking its description, start, and end values.
+     *
+     * @param details event description, start date, and end date arguments
+     * @return event represented by the arguments
+     * @throws ChatbotException if required arguments are missing or a date is invalid
+     */
     public Event parseEvent(String details) throws ChatbotException {
         if (details.isEmpty()) {
             throw new ChatbotException(
@@ -158,7 +190,15 @@ public class Parser {
         }
     }
 
-    /** Parses and validates a one-based task number, returning its zero-based index. */
+    /**
+     * Parses and validates a one-based task number, returning its zero-based index.
+     *
+     * @param numberText user-supplied task number
+     * @param command command name used in validation guidance
+     * @param taskCount number of tasks currently available
+     * @return zero-based index corresponding to the task number
+     * @throws ChatbotException if the number is missing, non-numeric, or out of range
+     */
     public int parseTaskIndex(String numberText, String command, int taskCount)
             throws ChatbotException {
         if (numberText.isEmpty()) {
@@ -176,7 +216,13 @@ public class Parser {
         return taskNumber - 1;
     }
 
-    /** Parses the date supplied to the schedule command. */
+    /**
+     * Parses the date supplied to the schedule command.
+     *
+     * @param dateText date in {@code yyyy-MM-dd} format
+     * @return parsed schedule date
+     * @throws ChatbotException if the date is missing or invalid
+     */
     public LocalDate parseScheduleDate(String dateText) throws ChatbotException {
         if (dateText.isEmpty()) {
             throw new ChatbotException(
@@ -190,7 +236,14 @@ public class Parser {
         }
     }
 
-    /** Finds a command marker that is followed by whitespace or ends the input. */
+    /**
+     * Finds a standalone command marker that is followed by whitespace or ends the input.
+     *
+     * @param details arguments to search
+     * @param marker marker text, such as {@code /by}
+     * @param fromIndex index at which to begin searching
+     * @return index of the marker's leading space, or {@code -1} if it is absent
+     */
     private int findMarker(String details, String marker, int fromIndex) {
         String markerWithLeadingSpace = " " + marker;
         int index = details.indexOf(markerWithLeadingSpace, fromIndex);

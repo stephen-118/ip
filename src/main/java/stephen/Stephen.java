@@ -12,8 +12,13 @@ import stephen.task.Task;
 import stephen.task.TaskList;
 import stephen.ui.Ui;
 
+/** Starts and coordinates the Stephen task-management chatbot. */
 public class Stephen {
     private static final Path DATA_FILE = Path.of("data", "stephen.txt");
+
+    /** Creates an application entry-point instance. */
+    public Stephen() {
+    }
 
     /**
      * Runs the chatbot and stores tasks entered during the current session.

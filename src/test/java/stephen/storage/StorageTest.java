@@ -14,7 +14,12 @@ import stephen.task.Todo;
 
 /** Automated checks for task serialization, saving, and loading. */
 public class StorageTest {
-    /** Runs all storage checks without requiring an external test library. */
+    /**
+     * Runs all storage checks without requiring an external test library.
+     *
+     * @param args command-line arguments; not used
+     * @throws Exception if setup or persistence unexpectedly fails
+     */
     public static void main(String[] args) throws Exception {
         Path testRoot = Path.of("out", "storage-test");
         Path nestedDirectory = testRoot.resolve("nested");
@@ -79,7 +84,12 @@ public class StorageTest {
         System.out.println("StorageTest: all checks passed");
     }
 
-    /** Checks tasks by serializing the loaded objects back to the canonical format. */
+    /**
+     * Checks tasks by serializing the loaded objects back to the canonical format.
+     *
+     * @param tasks tasks to inspect
+     * @param expected expected serialized task records
+     */
     private static void assertTaskData(List<Task> tasks, List<String> expected) {
         List<String> actual = tasks.stream().map(Task::toDataString).toList();
         if (!actual.equals(expected)) {
@@ -87,7 +97,13 @@ public class StorageTest {
         }
     }
 
-    /** Checks exact UTF-8 save-file lines. */
+    /**
+     * Checks exact UTF-8 save-file lines.
+     *
+     * @param file save file to read
+     * @param expected expected file lines
+     * @throws Exception if the file cannot be read
+     */
     private static void assertLines(Path file, List<String> expected) throws Exception {
         List<String> actual = Files.readAllLines(file, StandardCharsets.UTF_8);
         if (!actual.equals(expected)) {
