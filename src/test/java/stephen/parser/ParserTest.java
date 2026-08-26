@@ -25,6 +25,7 @@ import stephen.task.Todo;
 class ParserTest {
     private final Parser parser = new Parser();
 
+    /** Verifies that each supported input produces its matching command type. */
     @Test
     void parse_supportedCommands_returnsMatchingCommandTypes() throws ChatbotException {
         TaskList tasks = new TaskList(java.util.List.of(new Todo("one")));
@@ -42,6 +43,7 @@ class ParserTest {
                 parser.parse("event trip /from 2024-02-28 /to 2024-02-29", tasks));
     }
 
+    /** Verifies that unknown commands and unexpected arguments are rejected. */
     @Test
     void parse_unknownOrExtraArguments_throwsHelpfulError() {
         TaskList tasks = new TaskList(java.util.List.of());
@@ -54,6 +56,7 @@ class ParserTest {
                 assertThrows(ChatbotException.class, () -> parser.parse("bye now", tasks)));
     }
 
+    /** Verifies consistent command and argument splitting at spacing boundaries. */
     @Test
     void getCommandAndArguments_spacingAndEmptyInput_splitConsistently() {
         assertEquals("todo", parser.getCommand("todo   read book  "));
@@ -62,6 +65,7 @@ class ParserTest {
         assertEquals("", parser.getArguments("list"));
     }
 
+    /** Verifies that todo descriptions are required and otherwise preserved. */
     @Test
     void parseTodo_emptyDescriptionRejected_nonEmptyDescriptionPreserved()
             throws ChatbotException {
@@ -70,6 +74,7 @@ class ParserTest {
                 assertThrows(ChatbotException.class, () -> parser.parseTodo("")));
     }
 
+    /** Verifies valid deadline dates and marker-like description text. */
     @Test
     void parseDeadline_validLeapDayAndMarkerLikeText_parsesCorrectly()
             throws ChatbotException {
@@ -80,6 +85,7 @@ class ParserTest {
         assertEquals("D | 0 | read /bypass notes | 2024-03-01", markerText.toDataString());
     }
 
+    /** Verifies that incomplete deadline arguments and invalid dates are rejected. */
     @Test
     void parseDeadline_missingPartsAndInvalidDates_rejected() {
         assertThrows(ChatbotException.class, () -> parser.parseDeadline(""));
@@ -90,6 +96,7 @@ class ParserTest {
                 () -> parser.parseDeadline("submit /by 2023-02-29"));
     }
 
+    /** Verifies that event ranges include both endpoint dates. */
     @Test
     void parseEvent_validRange_parsesBothInclusiveEndpoints() throws ChatbotException {
         Event event = parser.parseEvent("conference /from 2024-02-28 /to 2024-03-01");
@@ -100,6 +107,7 @@ class ParserTest {
         assertEquals(true, event.occursOn(LocalDate.of(2024, 3, 1)));
     }
 
+    /** Verifies that incomplete event arguments and invalid dates are rejected. */
     @Test
     void parseEvent_missingPartsAndInvalidDates_rejected() {
         assertThrows(ChatbotException.class, () -> parser.parseEvent(""));
@@ -114,6 +122,7 @@ class ParserTest {
                 () -> parser.parseEvent("meeting /from 2024-02-30 /to 2024-03-01"));
     }
 
+    /** Verifies conversion and validation of one-based task numbers. */
     @Test
     void parseTaskIndex_firstAndLastValid_middleBoundariesRejected() throws ChatbotException {
         assertEquals(0, parser.parseTaskIndex("1", "mark", 3));
@@ -125,6 +134,7 @@ class ParserTest {
         assertThrows(ChatbotException.class, () -> parser.parseTaskIndex("1", "mark", 0));
     }
 
+    /** Verifies strict parsing of dates supplied to the schedule command. */
     @Test
     void parseScheduleDate_leapDayAccepted_invalidAndEmptyRejected() throws ChatbotException {
         assertEquals(LocalDate.of(2024, 2, 29), parser.parseScheduleDate("2024-02-29"));
@@ -133,7 +143,12 @@ class ParserTest {
         assertThrows(ChatbotException.class, () -> parser.parseScheduleDate("29-02-2024"));
     }
 
-    /** Checks an exact user-facing validation message. */
+    /**
+     * Checks an exact user-facing validation message.
+     *
+     * @param expected expected message
+     * @param exception exception containing the actual message
+     */
     private static void assertMessage(String expected, ChatbotException exception) {
         assertEquals(expected, exception.getMessage());
     }

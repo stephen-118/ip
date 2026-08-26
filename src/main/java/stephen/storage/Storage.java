@@ -70,7 +70,14 @@ public class Storage {
         Files.write(filePath, lines, StandardCharsets.UTF_8);
     }
 
-    /** Converts one validated save-file line back into its concrete task type. */
+    /**
+     * Converts one save-file line back into its concrete task type.
+     *
+     * @param line serialized task record
+     * @return task represented by the record
+     * @throws IllegalArgumentException if the task type, field count, status, or escapes are invalid
+     * @throws DateTimeParseException if a stored date is invalid
+     */
     private Task parseTask(String line) {
         List<String> fields = splitEscapedFields(line);
         if (fields.size() < 3) {
@@ -105,7 +112,13 @@ public class Storage {
         return task;
     }
 
-    /** Splits pipe-delimited fields while decoding the save format's escapes. */
+    /**
+     * Splits pipe-delimited fields while decoding the save format's escapes.
+     *
+     * @param line serialized task record
+     * @return decoded and trimmed record fields
+     * @throws IllegalArgumentException if an escape sequence is unknown or incomplete
+     */
     private List<String> splitEscapedFields(String line) {
         List<String> fields = new ArrayList<>();
         StringBuilder field = new StringBuilder();

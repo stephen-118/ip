@@ -15,8 +15,11 @@ public class Task {
     /** Friendly date format used when displaying dated tasks to the user. */
     public static final DateTimeFormatter DISPLAY_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM d uuuu", Locale.ENGLISH);
+    /** Fixed category that determines the task's display and storage symbol. */
     protected final TaskType type;
+    /** User-provided text describing the task. */
     protected String description;
+    /** Whether the user has completed the task. */
     protected boolean isDone;
 
     /**
@@ -72,7 +75,12 @@ public class Task {
                 + escape(description);
     }
 
-    /** Escapes characters that have structural meaning in the save file. */
+    /**
+     * Escapes characters that have structural meaning in the save file.
+     *
+     * @param value text to escape
+     * @return escaped text suitable for one save-file field
+     */
     protected static String escape(String value) {
         return value.replace("\\", "\\\\")
                 .replace("|", "\\|")

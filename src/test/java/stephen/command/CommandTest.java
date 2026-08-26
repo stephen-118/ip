@@ -16,7 +16,12 @@ import stephen.ui.Ui;
 
 /** Automated checks for command parsing, execution, and exit signaling. */
 public class CommandTest {
-    /** Runs the command checks without requiring an external test library. */
+    /**
+     * Runs the command checks without requiring an external test library.
+     *
+     * @param args command-line arguments; not used
+     * @throws Exception if setup, execution, or persistence unexpectedly fails
+     */
     public static void main(String[] args) throws Exception {
         Path testRoot = Path.of("out", "command-test");
         Path dataFile = testRoot.resolve("tasks.txt");
@@ -81,7 +86,17 @@ public class CommandTest {
         System.out.println("CommandTest: all checks passed");
     }
 
-    /** Parses, type-checks, and executes one command. */
+    /**
+     * Parses, type-checks, and executes one command.
+     *
+     * @param parser parser used to interpret the input
+     * @param input command text to parse
+     * @param tasks task list on which to execute the command
+     * @param ui console UI supplied to the command
+     * @param storage persistence service supplied to the command
+     * @param expectedType expected concrete command type
+     * @throws Exception if parsing or execution fails
+     */
     private static void executeAndCheckType(Parser parser, String input, TaskList tasks,
             Ui ui, Storage storage, Class<? extends Command> expectedType) throws Exception {
         Command command = parser.parse(input, tasks);
@@ -89,7 +104,12 @@ public class CommandTest {
         command.execute(tasks, ui, storage);
     }
 
-    /** Checks that a parsed command has the expected concrete type. */
+    /**
+     * Checks that a parsed command has the expected concrete type.
+     *
+     * @param command parsed command to inspect
+     * @param expectedType expected concrete command type
+     */
     private static void assertCommandType(Command command,
             Class<? extends Command> expectedType) {
         if (!expectedType.isInstance(command)) {
@@ -98,7 +118,15 @@ public class CommandTest {
         }
     }
 
-    /** Checks the exact error produced by invalid input. */
+    /**
+     * Checks the exact error produced by invalid input.
+     *
+     * @param parser parser used to interpret the input
+     * @param tasks task list used during validation
+     * @param input invalid command text
+     * @param expectedMessage expected validation message
+     * @throws Exception if parsing unexpectedly succeeds or returns the wrong error
+     */
     private static void assertParseError(Parser parser, TaskList tasks, String input,
             String expectedMessage) throws Exception {
         try {
@@ -112,7 +140,12 @@ public class CommandTest {
         }
     }
 
-    /** Checks tasks through their canonical storage representation. */
+    /**
+     * Checks tasks through their canonical storage representation.
+     *
+     * @param tasks task list to inspect
+     * @param expected expected serialized task records
+     */
     private static void assertTaskData(TaskList tasks, List<String> expected) {
         List<String> actual = tasks.getTasks().stream().map(Task::toDataString).toList();
         if (!actual.equals(expected)) {
