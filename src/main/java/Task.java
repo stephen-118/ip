@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
@@ -43,6 +44,17 @@ public class Task {
     /** Marks this task as not done. */
     public void markAsNotDone() {
         isDone = false;
+    }
+
+    /**
+     * Checks whether this task occurs on a date. Tasks without dates do not occur
+     * on any schedule date; dated subclasses override this behavior.
+     *
+     * @param date date to check
+     * @return whether the task occurs on the date
+     */
+    public boolean occursOn(LocalDate date) {
+        return false;
     }
 
     /**

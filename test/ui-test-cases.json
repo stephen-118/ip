@@ -618,5 +618,90 @@
       "",
       "________________________________________________"
     ]
+  },
+  {
+    "id": "LEVEL8-STRETCH-01",
+    "aim": "Show deadlines and events occurring on a requested date",
+    "initialDataLines": [
+      "T | 0 | undated task",
+      "D | 0 | submit report | 2019-12-02",
+      "D | 0 | return book | 2019-12-04",
+      "E | 0 | conference | 2019-12-01 | 2019-12-03"
+    ],
+    "commands": [
+      "schedule 2019-12-02",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Here are the tasks occurring on Dec 2 2019:",
+      "2.[D][ ] submit report (by: Dec 2 2019)",
+      "4.[E][ ] conference (from: Dec 1 2019 to: Dec 3 2019)",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL8-STRETCH-02",
+    "aim": "Show a clear message when no dated tasks occur on the requested date",
+    "initialDataLines": [
+      "T | 0 | undated task",
+      "D | 0 | submit report | 2019-12-02",
+      "E | 0 | conference | 2019-12-03 | 2019-12-04"
+    ],
+    "commands": [
+      "schedule 2019-12-05",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "There are no deadlines or events on Dec 5 2019.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
+  },
+  {
+    "id": "LEVEL8-STRETCH-03",
+    "aim": "Reject an invalid schedule date without crashing",
+    "commands": [
+      "schedule 2019-02-29",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Oops! Invalid schedule date. Please use yyyy-MM-dd, for example 2019-12-02.",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
   }
 ]

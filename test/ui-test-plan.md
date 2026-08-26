@@ -178,3 +178,24 @@ Deadline, and an incomplete Event, as recorded in `test/ui-test-cases.json`.
 **Expected output:** The list contains exactly the three valid tasks in file order, with
 the Deadline displayed as completed. The malformed and blank records produce no task and
 do not crash the application.
+
+## LEVEL8-STRETCH-01 — Show tasks scheduled on a date
+
+**Aim:** Verify that `schedule 2019-12-02` displays deadlines due on that date and events
+whose inclusive date range contains that date. Todos and dated tasks outside the requested
+date are excluded. Displayed numbers remain the tasks' original list numbers.
+
+**Initial data:** A Todo, two Deadlines on different dates, and a multi-day Event.
+
+**Expected output:** The matching Deadline and Event are shown under the friendly date
+heading `Here are the tasks occurring on Dec 2 2019:`.
+
+## LEVEL8-STRETCH-02 — Show an empty schedule
+
+**Aim:** Verify that a valid date with no matching deadlines or events displays the clear
+message `There are no deadlines or events on Dec 5 2019.`.
+
+## LEVEL8-STRETCH-03 — Reject an invalid schedule date
+
+**Aim:** Verify that the nonexistent date in `schedule 2019-02-29` is rejected with the
+expected `yyyy-MM-dd` format and that the chatbot continues to process `bye`.
