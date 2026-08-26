@@ -51,6 +51,16 @@ jar {
 
 shadowJar {
     archiveFileName = 'duke.jar'
+
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+
+    // Preserve service-provider registrations contributed by runtime dependencies.
+    mergeServiceFiles()
+
+    // Dependency signatures no longer match after their contents are repackaged.
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
 }
 
 run {
