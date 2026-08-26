@@ -1,4 +1,4 @@
-# Level 6 UI Test Plan
+# Level 7 UI Test Plan
 
 ## Test protocol
 
@@ -6,6 +6,10 @@
 - Java version: 25
 - Compile destination: `out/ui-test`
 - Machine-readable cases: `test/ui-test-cases.json`
+- Runner: `scripts/run_ui_tests.ps1`
+- Each case runs in its own ignored directory under `out/ui-test-work`. The runner removes
+  that case's prior data file and optionally writes `initialDataLines`, keeping persistent
+  sessions isolated and repeatable without touching the user's normal data file.
 - Each test case starts a fresh process. Its inputs are sent in order and the entire console output is compared exactly, except for platform line endings and one trailing newline.
 - Testing stops immediately after the first failed test case. The transcript shows console inputs with a `>` prefix, followed by the actual console output. A failure also shows the exact expected output.
 - The separator emitted by the program is a blank line followed by 48 underscore characters.
@@ -144,8 +148,32 @@ list is empty, and preservation of list state after rejected delete commands.
 `delete 999`; list the tasks; delete task 2 and list; then delete task 1 twice, listing
 after each deletion; finally enter `bye`.
 
+Successful additions and deletions also exercise the new automatic-save path. Saving is
+intentionally silent, so the expected console output remains unchanged.
+
 **Expected output:** Each invalid command prints the existing specific task-number error,
 and the first list still contains all three tasks. Deleting task 2 removes `second task`
 and renumbers `third task` from 3 to 2. The following deletions remove the first task and
 then the remaining (last) task. The final list has no numbered task lines. Exact output is
 recorded in `test/ui-test-cases.json`.
+
+## Level 7 storage test
+
+`StorageTest` verifies the non-UI persistence behavior directly. It checks serialization
+of Todo, Deadline, and Event tasks (including completion status and escaped delimiters),
+automatic parent-directory creation, and replacement of the file after status and list
+changes.
+
+## LEVEL7-01 — Load saved tasks and tolerate corrupted records
+
+**Aim:** Verify application startup restores all three task types and completion status,
+ignores a blank line and one malformed line, and still accepts `list` and `bye` normally.
+
+**Initial data:** An incomplete Todo, a blank line, a malformed record, a completed
+Deadline, and an incomplete Event, as recorded in `test/ui-test-cases.json`.
+
+**Inputs:** `list`, then `bye`.
+
+**Expected output:** The list contains exactly the three valid tasks in file order, with
+the Deadline displayed as completed. The malformed and blank records produce no task and
+do not crash the application.

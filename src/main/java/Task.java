@@ -38,6 +38,25 @@ public class Task {
     }
 
     /**
+     * Returns this task in the pipe-delimited format used in the save file.
+     * Backslashes, pipes, and line breaks are escaped so each task stays on one line.
+     *
+     * @return serialized task data
+     */
+    public String toDataString() {
+        return type.getSymbol() + " | " + (isDone ? "1" : "0") + " | "
+                + escape(description);
+    }
+
+    /** Escapes characters that have structural meaning in the save file. */
+    protected static String escape(String value) {
+        return value.replace("\\", "\\\\")
+                .replace("|", "\\|")
+                .replace("\r", "\\r")
+                .replace("\n", "\\n");
+    }
+
+    /**
      * Returns the task in the format used by the chatbot.
      *
      * @return status icon followed by the task description

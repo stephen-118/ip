@@ -1,9 +1,12 @@
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Stephen {
     private static final String SEPARATOR = "\n________________________________________________";
+    private static final Path DATA_FILE = Path.of("data", "stephen.txt");
 
     /**
      * Runs the chatbot and stores tasks entered during the current session.
@@ -13,10 +16,18 @@ public class Stephen {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage(DATA_FILE);
 
         System.out.println("Hello! I'm Stephen.");
         System.out.println("What can I do for you?");
         System.out.println(SEPARATOR);
+
+        try {
+            tasks.addAll(storage.load());
+        } catch (IOException e) {
+            System.out.println("Oops! I couldn't load your tasks. Starting with an empty list.");
+            System.out.println(SEPARATOR);
+        }
 
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine().trim();
@@ -38,16 +49,19 @@ public class Stephen {
                 } else if (input.equals("mark") || input.startsWith("mark ")) {
                     int taskIndex = parseTaskIndex(input, "mark", tasks.size());
                     tasks.get(taskIndex).markAsDone();
+                    saveTasks(storage, tasks);
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println(tasks.get(taskIndex));
                 } else if (input.equals("unmark") || input.startsWith("unmark ")) {
                     int taskIndex = parseTaskIndex(input, "unmark", tasks.size());
                     tasks.get(taskIndex).markAsNotDone();
+                    saveTasks(storage, tasks);
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println(tasks.get(taskIndex));
                 } else if (input.equals("delete") || input.startsWith("delete ")) {
                     int taskIndex = parseTaskIndex(input, "delete", tasks.size());
                     Task deletedTask = tasks.remove(taskIndex);
+                    saveTasks(storage, tasks);
                     System.out.println("Noted. I've removed this task:");
                     System.out.println("  " + deletedTask);
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
@@ -58,14 +72,17 @@ public class Stephen {
                     }
                     Task todo = new Todo(description);
                     tasks.add(todo);
+                    saveTasks(storage, tasks);
                     printAddedTask(todo, tasks.size());
                 } else if (input.equals("deadline") || input.startsWith("deadline ")) {
                     Deadline deadline = parseDeadline(input.substring(8).trim());
                     tasks.add(deadline);
+                    saveTasks(storage, tasks);
                     printAddedTask(deadline, tasks.size());
                 } else if (input.equals("event") || input.startsWith("event ")) {
                     Event event = parseEvent(input.substring(5).trim());
                     tasks.add(event);
+                    saveTasks(storage, tasks);
                     printAddedTask(event, tasks.size());
                 } else {
                     throw new ChatbotException("I don't recognise that command.");
@@ -74,6 +91,15 @@ public class Stephen {
                 System.out.println("Oops! " + e.getMessage());
             }
             System.out.println(SEPARATOR);
+        }
+    }
+
+    /** Saves the task list and converts file-system failures into user-facing errors. */
+    private static void saveTasks(Storage storage, List<Task> tasks) throws ChatbotException {
+        try {
+            storage.save(tasks);
+        } catch (IOException e) {
+            throw new ChatbotException("I couldn't save your tasks. Please check the data folder.");
         }
     }
 
