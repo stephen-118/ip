@@ -24,6 +24,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    // Existing tests use main methods until the later A-JUnit increment.
+    failOnNoDiscoveredTests = false
 
     testLogging {
         events 'passed', 'skipped', 'failed'
@@ -37,7 +39,7 @@ test {
 }
 
 application {
-    mainClass = 'seedu.duke.Duke'
+    mainClass = 'stephen.Stephen'
 }
 
 jar {
