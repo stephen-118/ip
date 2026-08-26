@@ -25,7 +25,7 @@ class StorageJUnitTest {
 
     /** Verifies that loading a missing file has no filesystem side effects. */
     @Test
-    void load_missingFile_returnsEmptyListWithoutCreatingFile() throws IOException {
+    void loadMissingFileReturnsEmptyListWithoutCreatingFile() throws IOException {
         Path dataFile = tempDirectory.resolve("missing").resolve("tasks.txt");
 
         assertEquals(List.of(), new Storage(dataFile).load());
@@ -35,7 +35,7 @@ class StorageJUnitTest {
 
     /** Verifies lossless persistence of all task types and escaped content. */
     @Test
-    void saveAndLoad_allTaskTypesStatusEscapesAndDuplicates_roundTrip() throws IOException {
+    void saveAndLoadAllTaskTypesStatusEscapesAndDuplicatesRoundTrip() throws IOException {
         Path dataFile = tempDirectory.resolve("nested").resolve("tasks.txt");
         Storage storage = new Storage(dataFile);
         Todo special = new Todo("line one\nline two | path\\notes");
@@ -56,7 +56,7 @@ class StorageJUnitTest {
 
     /** Verifies that saving an empty list clears existing file contents. */
     @Test
-    void save_emptyList_replacesExistingContents() throws IOException {
+    void saveEmptyListReplacesExistingContents() throws IOException {
         Path dataFile = tempDirectory.resolve("tasks.txt");
         Storage storage = new Storage(dataFile);
         storage.save(List.of(new Todo("old task")));
@@ -69,7 +69,7 @@ class StorageJUnitTest {
 
     /** Verifies that malformed records are skipped without discarding valid records. */
     @Test
-    void load_blankAndMalformedRecords_skipsOnlyBadLines() throws IOException {
+    void loadBlankAndMalformedRecordsSkipsOnlyBadLines() throws IOException {
         Path dataFile = tempDirectory.resolve("tasks.txt");
         Files.write(dataFile, List.of(
                 "",

@@ -29,6 +29,10 @@ Unless the user says otherwise, assume that you are assisting a student working 
 Ensure that Java 25 is used when running the application or build tasks.
 The development environment is Windows with IntelliJ IDEA. Ensure that the IntelliJ Project SDK is configured to use Java 25.
 
+## Java coding standard
+
+All Java code added or modified in this project must follow the SE-EDU intermediate Java coding standard at `https://se-education.org/guides/conventions/java/intermediate.html`. Invoke the project-specific `seedu-java-coding-standard` skill when adding, modifying, or reviewing Java code.
+
 ## UI testing
 
 After each application code update:
@@ -39,5 +43,5 @@ After each application code update:
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
-When proposing or creating a commit message, include enough detail to explain the rationale for the change.
+All Git commit messages must follow the SE-EDU Git standard at `https://se-education.org/guides/conventions/git.html`. Invoke the project-specific `seedu-git-standard` skill when proposing or creating commit messages.
 Do not commit or push unless explicitly asked.

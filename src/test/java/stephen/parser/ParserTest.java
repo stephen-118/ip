@@ -27,7 +27,7 @@ class ParserTest {
 
     /** Verifies that each supported input produces its matching command type. */
     @Test
-    void parse_supportedCommands_returnsMatchingCommandTypes() throws ChatbotException {
+    void parseSupportedCommandsReturnsMatchingCommandTypes() throws ChatbotException {
         TaskList tasks = new TaskList(java.util.List.of(new Todo("one")));
 
         assertInstanceOf(ExitCommand.class, parser.parse("bye", tasks));
@@ -45,7 +45,7 @@ class ParserTest {
 
     /** Verifies that unknown commands and unexpected arguments are rejected. */
     @Test
-    void parse_unknownOrExtraArguments_throwsHelpfulError() {
+    void parseUnknownOrExtraArgumentsThrowsHelpfulError() {
         TaskList tasks = new TaskList(java.util.List.of());
 
         assertMessage("I don't recognise that command.",
@@ -58,7 +58,7 @@ class ParserTest {
 
     /** Verifies consistent command and argument splitting at spacing boundaries. */
     @Test
-    void getCommandAndArguments_spacingAndEmptyInput_splitConsistently() {
+    void getCommandAndArgumentsSpacingAndEmptyInputSplitConsistently() {
         assertEquals("todo", parser.getCommand("todo   read book  "));
         assertEquals("read book", parser.getArguments("todo   read book  "));
         assertEquals("", parser.getCommand(""));
@@ -67,7 +67,7 @@ class ParserTest {
 
     /** Verifies that todo descriptions are required and otherwise preserved. */
     @Test
-    void parseTodo_emptyDescriptionRejected_nonEmptyDescriptionPreserved()
+    void parseTodoEmptyDescriptionRejectedNonEmptyDescriptionPreserved()
             throws ChatbotException {
         assertEquals("T | 0 | read book", parser.parseTodo("read book").toDataString());
         assertMessage("A todo needs a description. Try: todo borrow book",
@@ -76,7 +76,7 @@ class ParserTest {
 
     /** Verifies valid deadline dates and marker-like description text. */
     @Test
-    void parseDeadline_validLeapDayAndMarkerLikeText_parsesCorrectly()
+    void parseDeadlineValidLeapDayAndMarkerLikeTextParsesCorrectly()
             throws ChatbotException {
         Deadline leapDay = parser.parseDeadline("submit /by 2024-02-29");
         Deadline markerText = parser.parseDeadline("read /bypass notes /by 2024-03-01");
@@ -87,7 +87,7 @@ class ParserTest {
 
     /** Verifies that incomplete deadline arguments and invalid dates are rejected. */
     @Test
-    void parseDeadline_missingPartsAndInvalidDates_rejected() {
+    void parseDeadlineMissingPartsAndInvalidDatesRejected() {
         assertThrows(ChatbotException.class, () -> parser.parseDeadline(""));
         assertThrows(ChatbotException.class, () -> parser.parseDeadline("submit"));
         assertThrows(ChatbotException.class, () -> parser.parseDeadline("/by 2024-01-01"));
@@ -98,7 +98,7 @@ class ParserTest {
 
     /** Verifies that event ranges include both endpoint dates. */
     @Test
-    void parseEvent_validRange_parsesBothInclusiveEndpoints() throws ChatbotException {
+    void parseEventValidRangeParsesBothInclusiveEndpoints() throws ChatbotException {
         Event event = parser.parseEvent("conference /from 2024-02-28 /to 2024-03-01");
 
         assertEquals("E | 0 | conference | 2024-02-28 | 2024-03-01",
@@ -109,7 +109,7 @@ class ParserTest {
 
     /** Verifies that incomplete event arguments and invalid dates are rejected. */
     @Test
-    void parseEvent_missingPartsAndInvalidDates_rejected() {
+    void parseEventMissingPartsAndInvalidDatesRejected() {
         assertThrows(ChatbotException.class, () -> parser.parseEvent(""));
         assertThrows(ChatbotException.class, () -> parser.parseEvent("meeting"));
         assertThrows(ChatbotException.class,
@@ -124,7 +124,7 @@ class ParserTest {
 
     /** Verifies conversion and validation of one-based task numbers. */
     @Test
-    void parseTaskIndex_firstAndLastValid_middleBoundariesRejected() throws ChatbotException {
+    void parseTaskIndexFirstAndLastValidMiddleBoundariesRejected() throws ChatbotException {
         assertEquals(0, parser.parseTaskIndex("1", "mark", 3));
         assertEquals(2, parser.parseTaskIndex("3", "mark", 3));
         assertThrows(ChatbotException.class, () -> parser.parseTaskIndex("", "mark", 3));
@@ -136,7 +136,7 @@ class ParserTest {
 
     /** Verifies strict parsing of dates supplied to the schedule command. */
     @Test
-    void parseScheduleDate_leapDayAccepted_invalidAndEmptyRejected() throws ChatbotException {
+    void parseScheduleDateLeapDayAcceptedInvalidAndEmptyRejected() throws ChatbotException {
         assertEquals(LocalDate.of(2024, 2, 29), parser.parseScheduleDate("2024-02-29"));
         assertThrows(ChatbotException.class, () -> parser.parseScheduleDate(""));
         assertThrows(ChatbotException.class, () -> parser.parseScheduleDate("2023-02-29"));
