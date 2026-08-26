@@ -588,5 +588,39 @@
       "",
       "________________________________________________"
     ]
+  },
+  {
+    "id": "LEVEL7-01",
+    "aim": "Load valid saved tasks while ignoring blank and malformed records",
+    "initialDataLines": [
+      "T | 0 | read book",
+      "",
+      "corrupted record",
+      "D | 1 | submit report | Friday",
+      "E | 0 | project meeting | Mon 2pm | Mon 4pm"
+    ],
+    "commands": [
+      "list",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Here are the tasks in your list:",
+      "1.[T][ ] read book",
+      "2.[D][X] submit report (by: Friday)",
+      "3.[E][ ] project meeting (from: Mon 2pm to: Mon 4pm)",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
   }
 ]

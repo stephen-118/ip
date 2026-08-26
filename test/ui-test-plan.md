@@ -6,6 +6,10 @@
 - Java version: 25
 - Compile destination: `out/ui-test`
 - Machine-readable cases: `test/ui-test-cases.json`
+- Runner: `scripts/run_ui_tests.ps1`
+- Each case runs in its own ignored directory under `out/ui-test-work`. The runner removes
+  that case's prior data file and optionally writes `initialDataLines`, keeping persistent
+  sessions isolated and repeatable without touching the user's normal data file.
 - Each test case starts a fresh process. Its inputs are sent in order and the entire console output is compared exactly, except for platform line endings and one trailing newline.
 - Testing stops immediately after the first failed test case. The transcript shows console inputs with a `>` prefix, followed by the actual console output. A failure also shows the exact expected output.
 - The separator emitted by the program is a blank line followed by 48 underscore characters.
@@ -159,3 +163,17 @@ recorded in `test/ui-test-cases.json`.
 of Todo, Deadline, and Event tasks (including completion status and escaped delimiters),
 automatic parent-directory creation, and replacement of the file after status and list
 changes.
+
+## LEVEL7-01 — Load saved tasks and tolerate corrupted records
+
+**Aim:** Verify application startup restores all three task types and completion status,
+ignores a blank line and one malformed line, and still accepts `list` and `bye` normally.
+
+**Initial data:** An incomplete Todo, a blank line, a malformed record, a completed
+Deadline, and an incomplete Event, as recorded in `test/ui-test-cases.json`.
+
+**Inputs:** `list`, then `bye`.
+
+**Expected output:** The list contains exactly the three valid tasks in file order, with
+the Deadline displayed as completed. The malformed and blank records produce no task and
+do not crash the application.

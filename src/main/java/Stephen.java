@@ -22,6 +22,13 @@ public class Stephen {
         System.out.println("What can I do for you?");
         System.out.println(SEPARATOR);
 
+        try {
+            tasks.addAll(storage.load());
+        } catch (IOException e) {
+            System.out.println("Oops! I couldn't load your tasks. Starting with an empty list.");
+            System.out.println(SEPARATOR);
+        }
+
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine().trim();
 
