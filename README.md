@@ -19,3 +19,9 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Finding tasks
+
+Enter `find KEYWORD` to display tasks whose descriptions contain the keyword or phrase.
+Matching is case-insensitive. For example, `find read book` finds a task described as
+`Read Book`.

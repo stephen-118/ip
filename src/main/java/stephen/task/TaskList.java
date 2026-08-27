@@ -74,6 +74,16 @@ public class TaskList {
     }
 
     /**
+     * Returns tasks whose descriptions contain the search phrase.
+     *
+     * @param keyword search phrase to match
+     * @return matching tasks in their original list order
+     */
+    public List<Task> find(String keyword) {
+        return tasks.stream().filter(task -> task.matches(keyword)).toList();
+    }
+
+    /**
      * Returns the number of tasks in the list.
      *
      * @return task count

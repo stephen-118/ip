@@ -703,5 +703,65 @@
       "",
       "________________________________________________"
     ]
+  },
+  {
+    "id": "LEVEL9-01",
+    "aim": "Find tasks by a case-insensitive keyword or phrase and reject a missing keyword",
+    "initialDataLines": [
+      "T | 0 | Read book book",
+      "D | 0 | return book | 2019-12-02",
+      "T | 0 | read book tonight",
+      "T | 0 | buy groceries"
+    ],
+    "commands": [
+      "find groceries",
+      "find book",
+      "find READ BOOK",
+      "find missing phrase",
+      "find",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Here are the 1 matching tasks:",
+      "1.[T][ ] buy groceries",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Here are the 3 matching tasks:",
+      "1.[T][ ] Read book book",
+      "2.[D][ ] return book (by: Dec 2 2019)",
+      "3.[T][ ] read book tonight",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Here are the 2 matching tasks:",
+      "1.[T][ ] Read book book",
+      "2.[T][ ] read book tonight",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "There are no tasks matching \"missing phrase\".",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Oops! Please provide a search keyword. Try: find book",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
   }
 ]

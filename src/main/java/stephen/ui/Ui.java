@@ -1,6 +1,7 @@
 package stephen.ui;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 import stephen.task.Task;
@@ -129,6 +130,23 @@ public class Ui {
         if (!hasMatches) {
             showLine("There are no deadlines or events on "
                     + date.format(Task.DISPLAY_DATE_FORMAT) + ".");
+        }
+    }
+
+    /**
+     * Displays tasks whose descriptions match the search phrase.
+     *
+     * @param matches matching tasks in display order
+     * @param keyword search phrase used to produce the matches
+     */
+    public void showFindResults(List<Task> matches, String keyword) {
+        if (matches.isEmpty()) {
+            showLine("There are no tasks matching \"" + keyword + "\".");
+            return;
+        }
+        showLine("Here are the " + matches.size() + " matching tasks:");
+        for (int i = 0; i < matches.size(); i++) {
+            showLine((i + 1) + "." + matches.get(i));
         }
     }
 

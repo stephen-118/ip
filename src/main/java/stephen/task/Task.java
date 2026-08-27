@@ -65,6 +65,16 @@ public class Task {
     }
 
     /**
+     * Returns whether this task's description contains the search phrase.
+     *
+     * @param keyword search phrase to match
+     * @return whether the description contains the phrase, ignoring case
+     */
+    public boolean matches(String keyword) {
+        return description.toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT));
+    }
+
+    /**
      * Returns this task in the pipe-delimited format used in the save file.
      * Backslashes, pipes, and line breaks are escaped so each task stays on one line.
      *

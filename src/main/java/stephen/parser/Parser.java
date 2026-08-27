@@ -7,6 +7,7 @@ import stephen.command.AddCommand;
 import stephen.command.Command;
 import stephen.command.DeleteCommand;
 import stephen.command.ExitCommand;
+import stephen.command.FindCommand;
 import stephen.command.ListCommand;
 import stephen.command.MarkCommand;
 import stephen.command.ScheduleCommand;
@@ -49,6 +50,8 @@ public class Parser {
             break;
         case "schedule":
             return new ScheduleCommand(parseScheduleDate(arguments));
+        case "find":
+            return new FindCommand(parseFindKeyword(arguments));
         case "mark":
             return new MarkCommand(parseTaskIndex(arguments, command, tasks.size()));
         case "unmark":
@@ -234,6 +237,20 @@ public class Parser {
             throw new ChatbotException("Invalid schedule date. Please use yyyy-MM-dd, "
                     + "for example 2019-12-02.");
         }
+    }
+
+    /**
+     * Parses and validates the phrase supplied to the find command.
+     *
+     * @param keyword search phrase supplied by the user
+     * @return validated search phrase
+     * @throws ChatbotException if the search phrase is empty
+     */
+    public String parseFindKeyword(String keyword) throws ChatbotException {
+        if (keyword.isEmpty()) {
+            throw new ChatbotException("Please provide a search keyword. Try: find book");
+        }
+        return keyword;
     }
 
     /**

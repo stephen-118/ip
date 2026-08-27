@@ -199,3 +199,20 @@ message `There are no deadlines or events on Dec 5 2019.`.
 
 **Aim:** Verify that the nonexistent date in `schedule 2019-02-29` is rejected with the
 expected `yyyy-MM-dd` format and that the chatbot continues to process `bye`.
+
+## LEVEL9-01 — Find tasks by description
+
+**Aim:** Verify that `find KEYWORD` searches task descriptions case-insensitively, treats
+all text after `find` as one phrase, preserves task order, and displays each task once.
+
+**Initial data:** Four tasks include one unique groceries match, three book matches, and
+two matches for the phrase `read book`. One description repeats `book` to confirm that a
+task is displayed only once.
+
+**Inputs:** Search for `groceries`, `book`, `READ BOOK`, and `missing phrase`; then enter
+`find` without a keyword and `bye`.
+
+**Expected output:** Successful searches show `Here are the N matching tasks:` followed
+by numbered task lines in their original order. The missing phrase reports no matches.
+The empty search prints `Oops! Please provide a search keyword. Try: find book` and the
+application continues to process `bye`.
