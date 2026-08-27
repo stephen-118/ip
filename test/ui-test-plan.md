@@ -1,10 +1,10 @@
-# Level 8 UI Test Plan
+# UI Test Plan
 
 ## Test protocol
 
 - Main class: `stephen.Stephen`
 - Java version: 25
-- Compile destination: `out/ui-test`
+- Compiled classes: `build/classes/java/main`
 - Machine-readable cases: `test/ui-test-cases.json`
 - Runner: `scripts/run_ui_tests.ps1`
 - Each case runs in its own ignored directory under `out/ui-test-work`. The runner removes
@@ -64,15 +64,16 @@ ________________________________________________
 
 **Aim:** Verify that `list` preserves insertion order and displays todo, deadline, and event formats.
 
-**Inputs:** Add `todo read book`, `deadline return book /by Sunday`, and `event project meeting /from Mon 2pm /to 4pm`; enter `list`, then `bye`.
+**Inputs:** Add `todo read book`, `deadline return book /by 2019-12-02`, and
+`event project meeting /from 2019-12-02 /to 2019-12-03`; enter `list`, then `bye`.
 
 **Expected output:** The three normal add confirmations have counts 1, 2, and 3. The list section is exactly:
 
 ```text
 Here are the tasks in your list:
 1.[T][ ] read book
-2.[D][ ] return book (by: Sunday)
-3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+2.[D][ ] return book (by: Dec 2 2019)
+3.[E][ ] project meeting (from: Dec 2 2019 to: Dec 3 2019)
 ```
 
 The normal greeting, separators, and farewell surround the interactions as recorded exactly in `test/ui-test-cases.json`.
@@ -109,15 +110,18 @@ OK, I've marked this task as not done yet:
 
 **Inputs:** `deadline submit report /by sometime after lunch-ish`, then `bye`.
 
-**Expected output:** The added task is `[D][ ] submit report (by: sometime after lunch-ish)`; all surrounding output matches the standard add session.
+**Expected output:** The invalid date is rejected with
+`Oops! Invalid deadline date. Please use yyyy-MM-dd, for example 2019-12-02.`;
+the application then processes `bye` normally.
 
 ## LEVEL4-08 — Reject a nonexistent event date
 
 **Aim:** Verify that strict parsing rejects `2019-02-29` and keeps the program running.
 
-**Inputs:** `event festival /from when the gates open /to after the encore`, then `bye`.
+**Inputs:** `event festival /from 2019-02-29 /to 2019-03-01`, then `bye`.
 
-**Expected output:** The added task is `[E][ ] festival (from: when the gates open to: after the encore)`; all surrounding output matches the standard add session.
+**Expected output:** The nonexistent date is rejected with the existing invalid-event-date
+message; the application then processes `bye` normally.
 
 ## LEVEL5-01 — Handle invalid input and preserve state
 
@@ -135,8 +139,8 @@ still processed. The final list contains only the two valid tasks that were not 
 
 ```text
 Here are the tasks in your list:
-1.[D][ ] return book (by: Sunday)
-2.[E][ ] meeting (from: 2pm to: 4pm)
+1.[D][ ] return book (by: Dec 2 2019)
+2.[E][ ] meeting (from: Dec 2 2019 to: Dec 3 2019)
 ```
 
 ## LEVEL6-01 — Delete tasks and preserve state after invalid deletes
