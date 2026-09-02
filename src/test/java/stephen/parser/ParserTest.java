@@ -94,8 +94,8 @@ class ParserTest {
         assertThrows(ChatbotException.class, () -> parser.parseDeadline("submit"));
         assertThrows(ChatbotException.class, () -> parser.parseDeadline("/by 2024-01-01"));
         assertThrows(ChatbotException.class, () -> parser.parseDeadline("submit /by"));
-        assertThrows(ChatbotException.class,
-                () -> parser.parseDeadline("submit /by 2023-02-29"));
+        assertThrows(
+                ChatbotException.class, () -> parser.parseDeadline("submit /by 2023-02-29"));
     }
 
     /** Verifies that event ranges include both endpoint dates. */
@@ -114,14 +114,15 @@ class ParserTest {
     void parseEventMissingPartsAndInvalidDatesRejected() {
         assertThrows(ChatbotException.class, () -> parser.parseEvent(""));
         assertThrows(ChatbotException.class, () -> parser.parseEvent("meeting"));
-        assertThrows(ChatbotException.class,
-                () -> parser.parseEvent("meeting /from 2024-01-01"));
-        assertThrows(ChatbotException.class,
-                () -> parser.parseEvent("meeting /from /to 2024-01-02"));
-        assertThrows(ChatbotException.class,
-                () -> parser.parseEvent("meeting /from 2024-01-01 /to"));
-        assertThrows(ChatbotException.class,
-                () -> parser.parseEvent("meeting /from 2024-02-30 /to 2024-03-01"));
+        assertThrows(
+                ChatbotException.class, () -> parser.parseEvent("meeting /from 2024-01-01"));
+        assertThrows(
+                ChatbotException.class, () -> parser.parseEvent("meeting /from /to 2024-01-02"));
+        assertThrows(
+                ChatbotException.class, () -> parser.parseEvent("meeting /from 2024-01-01 /to"));
+        assertThrows(
+                ChatbotException.class, () -> parser.parseEvent(
+                        "meeting /from 2024-02-30 /to 2024-03-01"));
     }
 
     /** Verifies conversion and validation of one-based task numbers. */
@@ -153,8 +154,9 @@ class ParserTest {
         assertMessage("Please provide a search keyword. Try: find book",
                 assertThrows(ChatbotException.class, () -> parser.parseFindKeyword("")));
         assertMessage("Please provide a search keyword. Try: find book",
-                assertThrows(ChatbotException.class,
-                        () -> parser.parse("find", new TaskList(java.util.List.of()))));
+                assertThrows(
+                        ChatbotException.class, () -> parser.parse(
+                                "find", new TaskList(java.util.List.of()))));
     }
 
     /**
