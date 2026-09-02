@@ -38,34 +38,34 @@ public class Parser {
         String arguments = getArguments(input);
 
         switch (command) {
-        case "bye":
-            if (arguments.isEmpty()) {
-                return new ExitCommand();
-            }
-            break;
-        case "list":
-            if (arguments.isEmpty()) {
-                return new ListCommand();
-            }
-            break;
-        case "schedule":
-            return new ScheduleCommand(parseScheduleDate(arguments));
-        case "find":
-            return new FindCommand(parseFindKeyword(arguments));
-        case "mark":
-            return new MarkCommand(parseTaskIndex(arguments, command, tasks.size()));
-        case "unmark":
-            return new UnmarkCommand(parseTaskIndex(arguments, command, tasks.size()));
-        case "delete":
-            return new DeleteCommand(parseTaskIndex(arguments, command, tasks.size()));
-        case "todo":
-            return new AddCommand(parseTodo(arguments));
-        case "deadline":
-            return new AddCommand(parseDeadline(arguments));
-        case "event":
-            return new AddCommand(parseEvent(arguments));
-        default:
-            break;
+            case "bye":
+                if (arguments.isEmpty()) {
+                    return new ExitCommand();
+                }
+                break;
+            case "list":
+                if (arguments.isEmpty()) {
+                    return new ListCommand();
+                }
+                break;
+            case "schedule":
+                return new ScheduleCommand(parseScheduleDate(arguments));
+            case "find":
+                return new FindCommand(parseFindKeyword(arguments));
+            case "mark":
+                return new MarkCommand(parseTaskIndex(arguments, command, tasks.size()));
+            case "unmark":
+                return new UnmarkCommand(parseTaskIndex(arguments, command, tasks.size()));
+            case "delete":
+                return new DeleteCommand(parseTaskIndex(arguments, command, tasks.size()));
+            case "todo":
+                return new AddCommand(parseTodo(arguments));
+            case "deadline":
+                return new AddCommand(parseDeadline(arguments));
+            case "event":
+                return new AddCommand(parseEvent(arguments));
+            default:
+                break;
         }
         throw new ChatbotException("I don't recognise that command.");
     }

@@ -20,6 +20,18 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
+## Checking code style
+
+Run Checkstyle on both the application and test code from the project folder:
+
+```powershell
+.\gradlew.bat checkstyleMain checkstyleTest
+```
+
+The rules in `config/checkstyle/checkstyle.xml` enforce the mechanically checkable
+parts of the [SE-EDU Java coding standard](https://se-education.org/guides/conventions/java/intermediate.html).
+Fix reported violations before submitting code.
+
 ## Finding tasks
 
 Enter `find KEYWORD` to display tasks whose descriptions contain the keyword or phrase.
