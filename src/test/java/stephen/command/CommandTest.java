@@ -22,7 +22,7 @@ public class CommandTest {
      * @param args command-line arguments; not used
      * @throws Exception if setup, execution, or persistence unexpectedly fails
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String... args) throws Exception {
         Path testRoot = Path.of("out", "command-test");
         Path dataFile = testRoot.resolve("tasks.txt");
         Files.createDirectories(testRoot);

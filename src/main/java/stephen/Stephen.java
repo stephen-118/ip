@@ -25,7 +25,7 @@ public class Stephen {
      *
      * @param args command-line arguments; not used
      */
-    public static void main(String[] args) {
+    public static void main(String... args) {
         Ui ui = new Ui();
         Storage storage = new Storage(DATA_FILE);
         Parser parser = new Parser();

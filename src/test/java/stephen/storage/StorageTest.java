@@ -20,7 +20,7 @@ public class StorageTest {
      * @param args command-line arguments; not used
      * @throws Exception if setup or persistence unexpectedly fails
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String... args) throws Exception {
         Path testRoot = Path.of("out", "storage-test");
         Path nestedDirectory = testRoot.resolve("nested");
         Path dataFile = nestedDirectory.resolve("tasks.txt");
