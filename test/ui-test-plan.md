@@ -220,3 +220,16 @@ task is displayed only once.
 by numbered task lines in their original order. The missing phrase reports no matches.
 The empty search prints `Oops! Please provide a search keyword. Try: find book` and the
 application continues to process `bye`.
+
+## Level 10 JavaFX GUI coverage
+
+The production GUI uses the same parser, commands, task list, and storage classes as the CLI
+through the UI-independent `Chatbot` facade. `ChatbotTest` automatically verifies a stateful
+add/list interaction, invalid-command feedback, divider-free response text, and propagation of
+the existing `bye` exit signal.
+
+The JavaFX setup and production-window behavior require a graphical environment and are checked
+manually. The smoke test covers FXML/controller/CSS loading, startup, Send and Enter submission,
+empty-input prevention, consecutive messages and scrolling, Shift+Enter multiline input,
+resizing, and the `bye` close behavior. Existing CLI expectations in
+`test/ui-test-cases.json` remain unchanged because Level 10 preserves the console interface.

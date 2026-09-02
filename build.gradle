@@ -20,6 +20,14 @@ checkstyle {
 
 dependencies {
     String jUnitVersion = '5.14.4'
+    String javaFxVersion = '17.0.7'
+
+    ['win', 'mac', 'linux'].each { platform ->
+        implementation "org.openjfx:javafx-base:${javaFxVersion}:${platform}"
+        implementation "org.openjfx:javafx-controls:${javaFxVersion}:${platform}"
+        implementation "org.openjfx:javafx-fxml:${javaFxVersion}:${platform}"
+        implementation "org.openjfx:javafx-graphics:${javaFxVersion}:${platform}"
+    }
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${jUnitVersion}"
 
@@ -44,7 +52,7 @@ test {
 }
 
 application {
-    mainClass = 'stephen.Stephen'
+    mainClass = 'stephen.Launcher'
 }
 
 jar {
@@ -69,5 +77,20 @@ shadowJar {
 }
 
 run {
+    standardInput = System.in
+}
+
+tasks.register('runHelloWorld', JavaExec) {
+    group = 'application'
+    description = 'Runs the isolated JavaFX setup verification application.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'stephen.helloworld.HelloWorldLauncher'
+}
+
+tasks.register('runCli', JavaExec) {
+    group = 'application'
+    description = 'Runs the original command-line chatbot.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'stephen.Stephen'
     standardInput = System.in
 }
