@@ -17,6 +17,8 @@ public class FindCommand extends Command {
      * @param keyword search phrase to match
      */
     public FindCommand(String keyword) {
+        assert keyword != null && !keyword.isBlank()
+                : "A find command must contain a non-blank parsed keyword";
         this.keyword = keyword;
     }
 
