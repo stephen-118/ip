@@ -233,3 +233,20 @@ manually. The smoke test covers FXML/controller/CSS loading, startup, Send and E
 empty-input prevention, consecutive messages and scrolling, Shift+Enter multiline input,
 resizing, and the `bye` close behavior. Existing CLI expectations in
 `test/ui-test-cases.json` remain unchanged because Level 10 preserves the console interface.
+
+## C-SORT-01 — Sort tasks alphabetically and persist their order
+
+**Aim:** Verify that `sort` orders mixed task types by description without regard to
+capitalization, preserves the relative order of descriptions equal under that comparison,
+renumbers the tasks, and leaves the sorted order available to subsequent commands.
+
+**Initial data:** An incomplete Todo named `zebra task`, a completed Deadline named
+`Alpha deadline`, and an incomplete Event named `alpha deadline`, in that order.
+
+**Inputs:** `sort`, `list`, then `bye`.
+
+**Expected output:** The sort confirmation and following list both show the completed
+Deadline first, then the Event whose description differs only by case, and the Todo last.
+This confirms case-insensitive stable ordering and renumbering. The exact complete output
+is recorded in `test/ui-test-cases.json`. Persistence of the new order is also checked by
+`CommandTest` against the saved data file.

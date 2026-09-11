@@ -59,6 +59,11 @@ public class CommandTest {
                     "T | 0 | read book",
                     "E | 0 | project meeting | 2019-12-02 | 2019-12-03"));
 
+            executeAndCheckType(parser, "sort", tasks, ui, storage, SortCommand.class);
+            assertTaskData(tasks, List.of(
+                    "E | 0 | project meeting | 2019-12-02 | 2019-12-03",
+                    "T | 0 | read book"));
+
             assertCommandType(parser.parse("list", tasks), ListCommand.class);
             assertCommandType(parser.parse("schedule 2019-12-02", tasks), ScheduleCommand.class);
             Command exit = parser.parse("bye", tasks);

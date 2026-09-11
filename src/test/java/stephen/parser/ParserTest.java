@@ -15,6 +15,7 @@ import stephen.command.FindCommand;
 import stephen.command.ListCommand;
 import stephen.command.MarkCommand;
 import stephen.command.ScheduleCommand;
+import stephen.command.SortCommand;
 import stephen.command.UnmarkCommand;
 import stephen.exception.ChatbotException;
 import stephen.task.Deadline;
@@ -33,6 +34,7 @@ class ParserTest {
 
         assertInstanceOf(ExitCommand.class, parser.parse("bye", tasks));
         assertInstanceOf(ListCommand.class, parser.parse("list", tasks));
+        assertInstanceOf(SortCommand.class, parser.parse("sort", tasks));
         assertInstanceOf(ScheduleCommand.class, parser.parse("schedule 2024-02-29", tasks));
         assertInstanceOf(FindCommand.class, parser.parse("find read book", tasks));
         assertInstanceOf(MarkCommand.class, parser.parse("mark 1", tasks));
@@ -54,6 +56,8 @@ class ParserTest {
                 assertThrows(ChatbotException.class, () -> parser.parse("unknown", tasks)));
         assertMessage("I don't recognise that command.",
                 assertThrows(ChatbotException.class, () -> parser.parse("list now", tasks)));
+        assertMessage("I don't recognise that command.",
+                assertThrows(ChatbotException.class, () -> parser.parse("sort now", tasks)));
         assertMessage("I don't recognise that command.",
                 assertThrows(ChatbotException.class, () -> parser.parse("bye now", tasks)));
     }

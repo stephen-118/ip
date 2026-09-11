@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-/** Tests task-list searches across descriptions. */
+/** Tests task-list operations involving task descriptions. */
 class TaskListTest {
     /** Verifies that a search can return one matching task. */
     @Test
@@ -64,6 +64,31 @@ class TaskListTest {
         assertEquals(List.of("book book book"), descriptions(tasks.find("book")));
     }
 
+    /** Verifies case-insensitive stable sorting across task types. */
+    @Test
+    void sortByDescriptionMixedCaseAndEqualKeysSortedStably() {
+        TaskList tasks = new TaskList(List.of(
+                new Todo("zebra"),
+                new Deadline("Alpha", LocalDate.of(2024, 6, 15)),
+                new Todo("alpha"),
+                new Todo("middle")));
+
+        tasks.sortByDescription();
+
+        assertEquals(List.of("Alpha", "alpha", "middle", "zebra"),
+                descriptions(tasks.getTasks()));
+    }
+
+    /** Verifies that sorting an empty task list is safe. */
+    @Test
+    void sortByDescriptionEmptyListRemainsEmpty() {
+        TaskList tasks = new TaskList(List.of());
+
+        tasks.sortByDescription();
+
+        assertEquals(List.of(), tasks.getTasks());
+    }
+
     /**
      * Converts matching tasks to their descriptions for concise assertions.
      *
@@ -71,6 +96,6 @@ class TaskListTest {
      * @return task descriptions in list order
      */
     private static List<String> descriptions(List<Task> tasks) {
-        return tasks.stream().map(task -> task.description).toList();
+        return tasks.stream().map(Task::getDescription).toList();
     }
 }

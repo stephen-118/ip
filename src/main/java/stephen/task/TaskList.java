@@ -1,6 +1,7 @@
 package stephen.task;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -86,6 +87,12 @@ public class TaskList {
      */
     public List<Task> find(String keyword) {
         return tasks.stream().filter(task -> task.matches(keyword)).toList();
+    }
+
+    /** Sorts tasks alphabetically by description, ignoring letter case. */
+    public void sortByDescription() {
+        tasks.sort(Comparator.comparing(Task::getDescription,
+                String.CASE_INSENSITIVE_ORDER));
     }
 
     /**

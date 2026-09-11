@@ -65,6 +65,21 @@ public class Ui {
      */
     public void showTaskList(TaskList tasks) {
         showLine("Here are the tasks in your list:");
+        showNumberedTasks(tasks);
+    }
+
+    /**
+     * Displays the confirmation and complete list after tasks are sorted.
+     *
+     * @param tasks sorted task list to display
+     */
+    public void showTasksSorted(TaskList tasks) {
+        showLine("I've sorted your tasks alphabetically:");
+        showNumberedTasks(tasks);
+    }
+
+    /** Displays all tasks with their one-based list numbers. */
+    private void showNumberedTasks(TaskList tasks) {
         for (int i = 0; i < tasks.size(); i++) {
             showLine((i + 1) + "." + tasks.get(i));
         }
