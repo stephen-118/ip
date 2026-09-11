@@ -135,12 +135,9 @@ public class Parser {
         if (by.isEmpty()) {
             throw new ChatbotException("A deadline needs a date after '/by'. Try: /by 2019-12-02");
         }
-        try {
-            return new Deadline(description, LocalDate.parse(by, Task.INPUT_DATE_FORMAT));
-        } catch (DateTimeParseException e) {
-            throw new ChatbotException("Invalid deadline date. Please use yyyy-MM-dd, "
-                    + "for example 2019-12-02.");
-        }
+        LocalDate deadlineDate = parseDate(by,
+                "Invalid deadline date. Please use yyyy-MM-dd, for example 2019-12-02.");
+        return new Deadline(description, deadlineDate);
     }
 
     /**
@@ -183,14 +180,11 @@ public class Parser {
         if (to.isEmpty()) {
             throw new ChatbotException("An event needs an end date after '/to'.");
         }
-        try {
-            return new Event(description,
-                    LocalDate.parse(from, Task.INPUT_DATE_FORMAT),
-                    LocalDate.parse(to, Task.INPUT_DATE_FORMAT));
-        } catch (DateTimeParseException e) {
-            throw new ChatbotException("Invalid event date. Please use yyyy-MM-dd for both dates, "
-                    + "for example /from 2019-12-02 /to 2019-12-03.");
-        }
+        String invalidDateMessage = "Invalid event date. Please use yyyy-MM-dd for both dates, "
+                + "for example /from 2019-12-02 /to 2019-12-03.";
+        LocalDate fromDate = parseDate(from, invalidDateMessage);
+        LocalDate toDate = parseDate(to, invalidDateMessage);
+        return new Event(description, fromDate, toDate);
     }
 
     /**
@@ -234,12 +228,8 @@ public class Parser {
             throw new ChatbotException(
                     "Please provide a schedule date. Try: schedule 2019-12-02");
         }
-        try {
-            return LocalDate.parse(dateText, Task.INPUT_DATE_FORMAT);
-        } catch (DateTimeParseException e) {
-            throw new ChatbotException("Invalid schedule date. Please use yyyy-MM-dd, "
-                    + "for example 2019-12-02.");
-        }
+        return parseDate(dateText,
+                "Invalid schedule date. Please use yyyy-MM-dd, for example 2019-12-02.");
     }
 
     /**
@@ -254,6 +244,23 @@ public class Parser {
             throw new ChatbotException("Please provide a search keyword. Try: find book");
         }
         return keyword;
+    }
+
+    /**
+     * Parses a strict ISO date and converts format failures into user-facing errors.
+     *
+     * @param dateText date in {@code yyyy-MM-dd} format
+     * @param invalidDateMessage message to use when parsing fails
+     * @return parsed date
+     * @throws ChatbotException if the date is invalid
+     */
+    private LocalDate parseDate(String dateText, String invalidDateMessage)
+            throws ChatbotException {
+        try {
+            return LocalDate.parse(dateText, Task.INPUT_DATE_FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new ChatbotException(invalidDateMessage);
+        }
     }
 
     /**
