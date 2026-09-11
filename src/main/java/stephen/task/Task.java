@@ -29,6 +29,9 @@ public class Task {
      * @param description description of the task
      */
     public Task(TaskType type, String description) {
+        assert type != null : "A task must have a task type";
+        assert description != null : "A task description must not be null";
+        assert !description.isBlank() : "A task description must contain non-whitespace text";
         this.type = type;
         this.description = description;
         this.isDone = false;

@@ -2,6 +2,7 @@ package stephen.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** Stores tasks and provides the operations that update or retrieve them. */
 public class TaskList {
@@ -13,6 +14,9 @@ public class TaskList {
      * @param initialTasks tasks with which to initialize the list
      */
     public TaskList(List<Task> initialTasks) {
+        assert initialTasks != null : "The initial task collection must not be null";
+        assert initialTasks.stream().allMatch(Objects::nonNull)
+                : "The initial task collection must not contain null tasks";
         tasks = new ArrayList<>(initialTasks);
     }
 
@@ -22,6 +26,7 @@ public class TaskList {
      * @param task task to add
      */
     public void add(Task task) {
+        assert task != null : "A task list must not contain a null task";
         tasks.add(task);
     }
 

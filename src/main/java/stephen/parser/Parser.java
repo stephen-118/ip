@@ -210,7 +210,10 @@ public class Parser {
         if (taskNumber < 1 || taskNumber > taskCount) {
             throw new ChatbotException("That task number does not exist.");
         }
-        return taskNumber - 1;
+        int taskIndex = taskNumber - 1;
+        assert taskIndex >= 0 && taskIndex < taskCount
+                : "A validated task number must map to an existing zero-based index";
+        return taskIndex;
     }
 
     /**

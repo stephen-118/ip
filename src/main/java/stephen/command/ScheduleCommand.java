@@ -16,6 +16,7 @@ public class ScheduleCommand extends Command {
      * @param date date whose scheduled tasks should be displayed
      */
     public ScheduleCommand(LocalDate date) {
+        assert date != null : "A schedule command must contain a parsed date";
         this.date = date;
     }
 
