@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import stephen.task.Deadline;
 import stephen.task.Event;
@@ -36,22 +39,30 @@ public class Storage {
      * @throws IOException if an existing file cannot be read
      */
     public List<Task> load() throws IOException {
-        List<Task> tasks = new ArrayList<>();
         if (!Files.exists(filePath)) {
-            return tasks;
+            return new ArrayList<>();
         }
 
-        for (String line : Files.readAllLines(filePath, StandardCharsets.UTF_8)) {
-            if (line.isBlank()) {
-                continue;
-            }
-            try {
-                tasks.add(parseTask(line));
-            } catch (IllegalArgumentException | DateTimeParseException e) {
-                // Skip only the corrupted record so other saved tasks can still load.
-            }
+        try (Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
+            return lines.filter(line -> !line.isBlank())
+                    .map(this::parseTaskIfValid)
+                    .flatMap(Optional::stream)
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
-        return tasks;
+    }
+
+    /**
+     * Tries to parse one saved task while treating a malformed record as absent.
+     *
+     * @param line serialized task record
+     * @return parsed task, or an empty optional if the record is malformed
+     */
+    private Optional<Task> parseTaskIfValid(String line) {
+        try {
+            return Optional.of(parseTask(line));
+        } catch (IllegalArgumentException | DateTimeParseException e) {
+            return Optional.empty();
+        }
     }
 
     /**
