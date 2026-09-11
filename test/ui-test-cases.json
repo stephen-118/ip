@@ -763,5 +763,46 @@
       "",
       "________________________________________________"
     ]
+  },
+  {
+    "id": "C-SORT-01",
+    "aim": "Sort mixed task types alphabetically and retain their stable order",
+    "initialDataLines": [
+      "T | 0 | zebra task",
+      "D | 1 | Alpha deadline | 2019-12-02",
+      "E | 0 | alpha deadline | 2019-12-01 | 2019-12-03"
+    ],
+    "commands": [
+      "sort",
+      "list",
+      "bye"
+    ],
+    "expectedOutput": [
+      "Hello! I'm Stephen.",
+      "What can I do for you?",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "I've sorted your tasks alphabetically:",
+      "1.[D][X] Alpha deadline (by: Dec 2 2019)",
+      "2.[E][ ] alpha deadline (from: Dec 1 2019 to: Dec 3 2019)",
+      "3.[T][ ] zebra task",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Here are the tasks in your list:",
+      "1.[D][X] Alpha deadline (by: Dec 2 2019)",
+      "2.[E][ ] alpha deadline (from: Dec 1 2019 to: Dec 3 2019)",
+      "3.[T][ ] zebra task",
+      "",
+      "________________________________________________",
+      "",
+      "________________________________________________",
+      "Bye. Hope to see you again soon!",
+      "",
+      "________________________________________________"
+    ]
   }
 ]

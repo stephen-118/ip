@@ -11,6 +11,7 @@ import stephen.command.FindCommand;
 import stephen.command.ListCommand;
 import stephen.command.MarkCommand;
 import stephen.command.ScheduleCommand;
+import stephen.command.SortCommand;
 import stephen.command.UnmarkCommand;
 import stephen.exception.ChatbotException;
 import stephen.task.Deadline;
@@ -46,6 +47,11 @@ public class Parser {
             case "list":
                 if (arguments.isEmpty()) {
                     return new ListCommand();
+                }
+                break;
+            case "sort":
+                if (arguments.isEmpty()) {
+                    return new SortCommand();
                 }
                 break;
             case "schedule":
