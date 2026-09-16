@@ -1,12 +1,21 @@
 .main-window {
-    -fx-background-color: #eef2f7;
+    -fx-background-color: #f4f7fb;
     -fx-font-family: "Segoe UI";
 }
 
+.app-header {
+    -fx-background-color: #ffffff;
+}
+
 .app-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #26354a;
+    -fx-text-fill: #172033;
+}
+
+.app-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #68758a;
 }
 
 .chat-scroll,
@@ -23,44 +32,80 @@
 }
 
 .user-bubble,
-.stephen-bubble {
-    -fx-background-radius: 14px;
-    -fx-padding: 10px 14px;
+.stephen-bubble,
+.error-bubble {
+    -fx-padding: 10px 13px;
     -fx-font-size: 14px;
+    -fx-line-spacing: 2px;
 }
 
 .user-bubble {
-    -fx-background-color: #326fd1;
+    -fx-background-color: #356bd8;
+    -fx-background-radius: 16px 16px 4px 16px;
     -fx-text-fill: white;
 }
 
 .stephen-bubble {
     -fx-background-color: white;
-    -fx-text-fill: #26354a;
-    -fx-border-color: #d8e0ea;
-    -fx-border-radius: 14px;
+    -fx-background-radius: 16px 16px 16px 4px;
+    -fx-text-fill: #243047;
+    -fx-effect: dropshadow(gaussian, rgba(30, 50, 80, 0.10), 8, 0.15, 0, 2);
+}
+
+.error-bubble {
+    -fx-background-color: #fff1f0;
+    -fx-background-radius: 16px 16px 16px 4px;
+    -fx-border-color: #f2b8b5;
+    -fx-border-radius: 16px 16px 16px 4px;
+    -fx-text-fill: #9f201b;
 }
 
 .input-panel {
     -fx-background-color: white;
-    -fx-border-color: #d8e0ea transparent transparent transparent;
+    -fx-border-color: #dfe5ee transparent transparent transparent;
 }
 
 .text-area {
     -fx-font-size: 14px;
+    -fx-background-color: #f7f9fc;
+    -fx-background-radius: 9px;
+    -fx-border-color: #cdd6e3;
+    -fx-border-radius: 9px;
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    -fx-max-height: 84px;
+}
+
+.text-area:focused {
+    -fx-border-color: #356bd8;
+    -fx-effect: dropshadow(gaussian, rgba(53, 107, 216, 0.18), 5, 0.10, 0, 0);
+}
+
+.text-area .content {
+    -fx-background-color: transparent;
+    -fx-background-radius: 9px;
 }
 
 .button {
-    -fx-background-color: #326fd1;
-    -fx-background-radius: 8px;
+    -fx-background-color: #356bd8;
+    -fx-background-radius: 9px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-min-height: 52px;
-    -fx-min-width: 82px;
+    -fx-min-height: 44px;
+    -fx-min-width: 76px;
+}
+
+.button:hover {
+    -fx-background-color: #2859bd;
+}
+
+.button:pressed {
+    -fx-background-color: #20499d;
 }
 
 .feedback-label {
-    -fx-text-fill: #b3261e;
+    -fx-font-size: 12px;
+    -fx-text-fill: #a42620;
 }
 
 .input-hint {

@@ -58,9 +58,9 @@ public class Chatbot {
             command.execute(tasks, responseUi, storage);
         } catch (ChatbotException e) {
             responseUi.showError(e.getMessage());
-            return new ChatbotResponse(String.join("\n", outputLines), false);
+            return new ChatbotResponse(String.join("\n", outputLines), false, true);
         }
-        return new ChatbotResponse(String.join("\n", outputLines), command.isExit());
+        return new ChatbotResponse(String.join("\n", outputLines), command.isExit(), false);
     }
 
     /** Captures command output without the console UI's decorative divider lines. */

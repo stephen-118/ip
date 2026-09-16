@@ -26,6 +26,7 @@ class ChatbotTest {
                 + "  [T][ ] read book\n"
                 + "Now you have 1 tasks in the list.", addResponse.message());
         assertFalse(addResponse.isExit());
+        assertFalse(addResponse.isError());
         assertEquals("Here are the tasks in your list:\n1.[T][ ] read book",
                 listResponse.message());
     }
@@ -38,6 +39,7 @@ class ChatbotTest {
 
         assertEquals("Oops! I don't recognise that command.", response.message());
         assertFalse(response.isExit());
+        assertTrue(response.isError());
     }
 
     /** Verifies that the existing exit command is surfaced to graphical clients. */
@@ -48,5 +50,6 @@ class ChatbotTest {
 
         assertEquals("Bye. Hope to see you again soon!", response.message());
         assertTrue(response.isExit());
+        assertFalse(response.isError());
     }
 }

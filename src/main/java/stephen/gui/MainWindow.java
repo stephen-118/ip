@@ -34,6 +34,11 @@ public class MainWindow {
     public void initialize() {
         dialogContainer.heightProperty().addListener(observable -> scrollToLatestMessage());
         userInput.addEventFilter(KeyEvent.KEY_PRESSED, this::handleInputKey);
+        userInput.textProperty().addListener((observable, oldText, newText) -> {
+            if (!newText.isBlank()) {
+                feedbackLabel.setText("");
+            }
+        });
         Platform.runLater(userInput::requestFocus);
     }
 
@@ -56,7 +61,7 @@ public class MainWindow {
         ChatbotResponse response = chatbot.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input),
-                DialogBox.getStephenDialog(response.message()));
+                DialogBox.getStephenDialog(response.message(), response.isError()));
         feedbackLabel.setText("");
         userInput.clear();
         userInput.requestFocus();

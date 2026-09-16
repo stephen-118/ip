@@ -1,5 +1,5 @@
 package stephen;
 
-/** Contains the chatbot's response to one user command and whether the session should end. */
-public record ChatbotResponse(String message, boolean isExit) {
+/** Contains the chatbot's response text and the state needed to present it in an interface. */
+public record ChatbotResponse(String message, boolean isExit, boolean isError) {
 }
