@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import stephen.task.Deadline;
 import stephen.task.Event;
@@ -43,12 +42,12 @@ public class Storage {
             return new ArrayList<>();
         }
 
-        try (Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
-            return lines.filter(line -> !line.isBlank())
-                    .map(this::parseTaskIfValid)
-                    .flatMap(Optional::stream)
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+        return lines.stream()
+                .filter(line -> !line.isBlank())
+                .map(this::parseTaskIfValid)
+                .flatMap(Optional::stream)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**

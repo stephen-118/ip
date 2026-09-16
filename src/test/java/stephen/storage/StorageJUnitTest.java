@@ -34,6 +34,15 @@ class StorageJUnitTest {
         assertFalse(Files.exists(dataFile.getParent()));
     }
 
+    /** Verifies that an unreadable data path is reported as a checked I/O failure. */
+    @Test
+    void loadPathIsDirectoryThrowsIoException() throws IOException {
+        Path dataFile = tempDirectory.resolve("tasks.txt");
+        Files.createDirectory(dataFile);
+
+        assertThrows(IOException.class, () -> new Storage(dataFile).load());
+    }
+
     /** Verifies lossless persistence of all task types and escaped content. */
     @Test
     void saveAndLoadAllTaskTypesStatusEscapesAndDuplicatesRoundTrip() throws IOException {
