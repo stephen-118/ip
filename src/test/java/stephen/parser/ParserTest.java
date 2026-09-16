@@ -45,6 +45,7 @@ class ParserTest {
                 parser.parse("deadline submit /by 2024-02-29", tasks));
         assertInstanceOf(AddCommand.class,
                 parser.parse("event trip /from 2024-02-28 /to 2024-02-29", tasks));
+        assertInstanceOf(AddCommand.class, parser.parse("  TODO\tread book  ", tasks));
     }
 
     /** Verifies that unknown commands and unexpected arguments are rejected. */
@@ -54,11 +55,13 @@ class ParserTest {
 
         assertMessage("I don't recognise that command.",
                 assertThrows(ChatbotException.class, () -> parser.parse("unknown", tasks)));
-        assertMessage("I don't recognise that command.",
+        assertMessage("Please enter a command. Try: list",
+                assertThrows(ChatbotException.class, () -> parser.parse("   ", tasks)));
+        assertMessage("The 'list' command does not accept extra details.",
                 assertThrows(ChatbotException.class, () -> parser.parse("list now", tasks)));
-        assertMessage("I don't recognise that command.",
+        assertMessage("The 'sort' command does not accept extra details.",
                 assertThrows(ChatbotException.class, () -> parser.parse("sort now", tasks)));
-        assertMessage("I don't recognise that command.",
+        assertMessage("The 'bye' command does not accept extra details.",
                 assertThrows(ChatbotException.class, () -> parser.parse("bye now", tasks)));
     }
 
@@ -67,6 +70,8 @@ class ParserTest {
     void getCommandAndArgumentsSpacingAndEmptyInputSplitConsistently() {
         assertEquals("todo", parser.getCommand("todo   read book  "));
         assertEquals("read book", parser.getArguments("todo   read book  "));
+        assertEquals("todo", parser.getCommand("  todo\tread book  "));
+        assertEquals("read book", parser.getArguments("  todo\tread book  "));
         assertEquals("", parser.getCommand(""));
         assertEquals("", parser.getArguments("list"));
     }
@@ -100,6 +105,9 @@ class ParserTest {
         assertThrows(ChatbotException.class, () -> parser.parseDeadline("submit /by"));
         assertThrows(
                 ChatbotException.class, () -> parser.parseDeadline("submit /by 2023-02-29"));
+        assertMessage("A deadline accepts only one '/by' date.",
+                assertThrows(ChatbotException.class, () -> parser.parseDeadline(
+                        "submit /by 2024-01-01 /by 2024-01-02")));
     }
 
     /** Verifies that event ranges include both endpoint dates. */
@@ -127,6 +135,18 @@ class ParserTest {
         assertThrows(
                 ChatbotException.class, () -> parser.parseEvent(
                         "meeting /from 2024-02-30 /to 2024-03-01"));
+        assertMessage("An event needs '/from' before '/to'.",
+                assertThrows(ChatbotException.class, () -> parser.parseEvent(
+                        "meeting /to 2024-03-01 /from 2024-02-29")));
+        assertMessage("An event accepts only one '/from' date.",
+                assertThrows(ChatbotException.class, () -> parser.parseEvent(
+                        "meeting /from 2024-02-28 /from 2024-02-29 /to 2024-03-01")));
+        assertMessage("An event accepts only one '/to' date.",
+                assertThrows(ChatbotException.class, () -> parser.parseEvent(
+                        "meeting /from 2024-02-28 /to 2024-02-29 /to 2024-03-01")));
+        assertMessage("An event's end date cannot be before its start date.",
+                assertThrows(ChatbotException.class, () -> parser.parseEvent(
+                        "meeting /from 2024-03-01 /to 2024-02-29")));
     }
 
     /** Verifies conversion and validation of one-based task numbers. */

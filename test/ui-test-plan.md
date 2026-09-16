@@ -234,6 +234,24 @@ empty-input prevention, consecutive messages and scrolling, Shift+Enter multilin
 resizing, and the `bye` close behavior. The exact CLI expectations in
 `test/ui-test-cases.json` also verify Orbit's mission-control response language.
 
+## A-MORE-ERROR-HANDLING-01 — Reject additional malformed input
+
+**Aim:** Verify that the parser rejects an empty command, unexpected arguments, repeated
+date markers, event markers in the wrong order, and an event whose end date precedes its
+start date. It must continue processing after every error without changing task state.
+
+**Inputs:** Submit an empty command; add extra text to `list`; use duplicate `/by`, `/from`,
+and `/to` markers; put `/to` before `/from`; enter a reversed event range; then add a Todo
+using an uppercase command and tab separator, list it, and enter `bye`.
+
+**Expected output:** Each invalid command receives a specific `Navigation alert:` response.
+The uppercase, tab-separated Todo command succeeds, proving whitespace and command case are
+handled safely. The final list contains only that Todo. Exact output is recorded in
+`test/ui-test-cases.json`.
+
+Storage tests additionally verify that missing files are harmless, malformed and reversed
+saved records are skipped, and an unusable save destination raises a recoverable I/O error.
+
 ## C-SORT-01 — Sort tasks alphabetically and persist their order
 
 **Aim:** Verify that `sort` orders mixed task types by description without regard to

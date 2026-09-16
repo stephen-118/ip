@@ -2,6 +2,7 @@ package stephen.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -67,6 +68,16 @@ class StorageJUnitTest {
         assertEquals(List.of(), Files.readAllLines(dataFile, StandardCharsets.UTF_8));
     }
 
+    /** Verifies that an unusable destination is reported instead of terminating the application. */
+    @Test
+    void savePathIsDirectoryThrowsIoException() throws IOException {
+        Path dataFile = tempDirectory.resolve("tasks.txt");
+        Files.createDirectory(dataFile);
+
+        assertThrows(IOException.class, () ->
+                new Storage(dataFile).save(List.of(new Todo("unsaved task"))));
+    }
+
     /** Verifies that malformed records are skipped without discarding valid records. */
     @Test
     void loadBlankAndMalformedRecordsSkipsOnlyBadLines() throws IOException {
@@ -80,6 +91,7 @@ class StorageJUnitTest {
                 "T | 0 | broken escape\\q",
                 "D | 1 | bad date | 2023-02-29",
                 "E | 0 | missing end | 2024-01-01",
+                "E | 0 | reversed | 2024-01-03 | 2024-01-02",
                 "E | 1 | valid | 2024-01-01 | 2024-01-02"), StandardCharsets.UTF_8);
 
         assertEquals(List.of(

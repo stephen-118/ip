@@ -15,9 +15,16 @@ public class Event extends Task {
      * @param description description of the event
      * @param from start date
      * @param to end date
+     * @throws IllegalArgumentException if a date is null or the end date precedes the start date
      */
     public Event(String description, LocalDate from, LocalDate to) {
         super(TaskType.EVENT, description);
+        if (from == null || to == null) {
+            throw new IllegalArgumentException("Event dates must not be null");
+        }
+        if (to.isBefore(from)) {
+            throw new IllegalArgumentException("Event end date cannot be before its start date");
+        }
         this.from = from;
         this.to = to;
     }
