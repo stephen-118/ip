@@ -31,40 +31,64 @@ public class Stephen {
         Parser parser = new Parser();
 
         ui.showWelcome();
+        TaskList tasks = new TaskList(loadTasks(storage, ui));
+        runCommandLoop(ui, storage, parser, tasks);
+    }
 
-        List<Task> loadedTasks = List.of();
+    /** Loads saved tasks, recovering with an empty list when the data cannot be read. */
+    private static List<Task> loadTasks(Storage storage, Ui ui) {
         try {
-            loadedTasks = storage.load();
+            return storage.load();
         } catch (IOException e) {
             ui.showError("I couldn't load your tasks. Starting with an empty list.");
             ui.showDivider();
+            return List.of();
         }
-        TaskList tasks = new TaskList(loadedTasks);
+    }
 
+    /** Reads and processes commands until input ends or the user exits. */
+    private static void runCommandLoop(Ui ui, Storage storage, Parser parser, TaskList tasks) {
         while (ui.hasNextInput()) {
-            String input = ui.readCommand();
-            Command command;
-            try {
-                command = parser.parse(input, tasks);
-            } catch (ChatbotException e) {
-                ui.showDivider();
-                ui.showError(e.getMessage());
-                ui.showDivider();
-                continue;
-            }
-
-            if (!command.isExit()) {
-                ui.showDivider();
-            }
-            try {
-                command.execute(tasks, ui, storage);
-            } catch (ChatbotException e) {
-                ui.showError(e.getMessage());
-            }
-            if (command.isExit()) {
+            if (!processNextCommand(ui, storage, parser, tasks)) {
                 break;
             }
+        }
+    }
+
+    /** Processes one command, returning whether the input loop should continue. */
+    private static boolean processNextCommand(Ui ui, Storage storage, Parser parser,
+            TaskList tasks) {
+        Command command;
+        try {
+            command = parser.parse(ui.readCommand(), tasks);
+        } catch (ChatbotException e) {
+            showErrorBetweenDividers(ui, e.getMessage());
+            return true;
+        }
+
+        if (!command.isExit()) {
             ui.showDivider();
         }
+        executeCommand(command, tasks, ui, storage);
+        if (!command.isExit()) {
+            ui.showDivider();
+        }
+        return !command.isExit();
+    }
+
+    /** Executes a parsed command and displays any recoverable execution error. */
+    private static void executeCommand(Command command, TaskList tasks, Ui ui, Storage storage) {
+        try {
+            command.execute(tasks, ui, storage);
+        } catch (ChatbotException e) {
+            ui.showError(e.getMessage());
+        }
+    }
+
+    /** Displays a validation error using the console session's standard separators. */
+    private static void showErrorBetweenDividers(Ui ui, String message) {
+        ui.showDivider();
+        ui.showError(message);
+        ui.showDivider();
     }
 }

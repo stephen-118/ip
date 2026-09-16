@@ -90,36 +90,47 @@ public class Storage {
      */
     private Task parseTask(String line) {
         List<String> fields = splitEscapedFields(line);
-        if (fields.size() < 3) {
-            throw new IllegalArgumentException("Too few task fields");
-        }
-
+        validateCommonFields(fields);
         String type = fields.get(0);
         String status = fields.get(1);
         String description = fields.get(2);
-        if (description.isEmpty() || (!status.equals("0") && !status.equals("1"))) {
+        Task task = createTask(fields, type, description);
+        setCompletionStatus(task, status);
+        return task;
+    }
+
+    /** Checks the fields shared by every serialized task type. */
+    private void validateCommonFields(List<String> fields) {
+        if (fields.size() < 3) {
+            throw new IllegalArgumentException("Too few task fields");
+        }
+        String status = fields.get(1);
+        if (fields.get(2).isEmpty() || (!status.equals("0") && !status.equals("1"))) {
             throw new IllegalArgumentException("Invalid task description or status");
         }
+    }
 
-        Task task;
+    /** Creates the concrete task represented by the type-specific fields. */
+    private Task createTask(List<String> fields, String type, String description) {
         if (type.equals("T") && fields.size() == 3) {
-            task = new Todo(description);
+            return new Todo(description);
         } else if (type.equals("D") && fields.size() == 4 && !fields.get(3).isEmpty()) {
-            task = new Deadline(description,
+            return new Deadline(description,
                     LocalDate.parse(fields.get(3), Task.INPUT_DATE_FORMAT));
         } else if (type.equals("E") && fields.size() == 5
                 && !fields.get(3).isEmpty() && !fields.get(4).isEmpty()) {
-            task = new Event(description,
+            return new Event(description,
                     LocalDate.parse(fields.get(3), Task.INPUT_DATE_FORMAT),
                     LocalDate.parse(fields.get(4), Task.INPUT_DATE_FORMAT));
-        } else {
-            throw new IllegalArgumentException("Invalid task type or field count");
         }
+        throw new IllegalArgumentException("Invalid task type or field count");
+    }
 
+    /** Applies the serialized completion status to a newly created task. */
+    private void setCompletionStatus(Task task, String status) {
         if (status.equals("1")) {
             task.markAsDone();
         }
-        return task;
     }
 
     /**
@@ -137,15 +148,7 @@ public class Storage {
         for (int i = 0; i < line.length(); i++) {
             char character = line.charAt(i);
             if (isEscaped) {
-                if (character == 'n') {
-                    field.append('\n');
-                } else if (character == 'r') {
-                    field.append('\r');
-                } else if (character == '|' || character == '\\') {
-                    field.append(character);
-                } else {
-                    throw new IllegalArgumentException("Unknown escape sequence");
-                }
+                appendEscapedCharacter(field, character);
                 isEscaped = false;
             } else if (character == '\\') {
                 isEscaped = true;
@@ -161,5 +164,18 @@ public class Storage {
         }
         fields.add(field.toString().trim());
         return fields;
+    }
+
+    /** Decodes one character following a storage escape marker. */
+    private void appendEscapedCharacter(StringBuilder field, char character) {
+        if (character == 'n') {
+            field.append('\n');
+        } else if (character == 'r') {
+            field.append('\r');
+        } else if (character == '|' || character == '\\') {
+            field.append(character);
+        } else {
+            throw new IllegalArgumentException("Unknown escape sequence");
+        }
     }
 }

@@ -38,47 +38,39 @@ public class Parser {
     public Command parse(String input, TaskList tasks) throws ChatbotException {
         String command = getCommand(input).toLowerCase(Locale.ROOT);
         String arguments = getArguments(input);
-
         if (command.isEmpty()) {
             throw new ChatbotException("Please enter a command. Try: list");
         }
 
-        switch (command) {
-            case "bye":
-                if (arguments.isEmpty()) {
-                    return new ExitCommand();
-                }
-                throw unexpectedArguments(command);
-            case "list":
-                if (arguments.isEmpty()) {
-                    return new ListCommand();
-                }
-                throw unexpectedArguments(command);
-            case "sort":
-                if (arguments.isEmpty()) {
-                    return new SortCommand();
-                }
-                throw unexpectedArguments(command);
-            case "schedule":
-                return new ScheduleCommand(parseScheduleDate(arguments));
-            case "find":
-                return new FindCommand(parseFindKeyword(arguments));
-            case "mark":
-                return new MarkCommand(parseTaskIndex(arguments, command, tasks.size()));
-            case "unmark":
-                return new UnmarkCommand(parseTaskIndex(arguments, command, tasks.size()));
-            case "delete":
-                return new DeleteCommand(parseTaskIndex(arguments, command, tasks.size()));
-            case "todo":
-                return new AddCommand(parseTodo(arguments));
-            case "deadline":
-                return new AddCommand(parseDeadline(arguments));
-            case "event":
-                return new AddCommand(parseEvent(arguments));
-            default:
-                break;
+        return createCommand(command, arguments, tasks);
+    }
+
+    /** Creates the command corresponding to a validated, non-empty command name. */
+    private Command createCommand(String command, String arguments, TaskList tasks)
+            throws ChatbotException {
+        return switch (command) {
+            case "bye" -> requireNoArguments(command, arguments, new ExitCommand());
+            case "list" -> requireNoArguments(command, arguments, new ListCommand());
+            case "sort" -> requireNoArguments(command, arguments, new SortCommand());
+            case "schedule" -> new ScheduleCommand(parseScheduleDate(arguments));
+            case "find" -> new FindCommand(parseFindKeyword(arguments));
+            case "mark" -> new MarkCommand(parseTaskIndex(arguments, command, tasks.size()));
+            case "unmark" -> new UnmarkCommand(parseTaskIndex(arguments, command, tasks.size()));
+            case "delete" -> new DeleteCommand(parseTaskIndex(arguments, command, tasks.size()));
+            case "todo" -> new AddCommand(parseTodo(arguments));
+            case "deadline" -> new AddCommand(parseDeadline(arguments));
+            case "event" -> new AddCommand(parseEvent(arguments));
+            default -> throw new ChatbotException("I don't recognise that command.");
+        };
+    }
+
+    /** Returns a command only when the user supplied no unexpected arguments. */
+    private Command requireNoArguments(String commandName, String arguments, Command command)
+            throws ChatbotException {
+        if (!arguments.isEmpty()) {
+            throw unexpectedArguments(commandName);
         }
-        throw new ChatbotException("I don't recognise that command.");
+        return command;
     }
 
     /**
@@ -164,6 +156,26 @@ public class Parser {
      * @throws ChatbotException if required arguments are missing or a date is invalid
      */
     public Event parseEvent(String details) throws ChatbotException {
+        validateEventOverview(details);
+        int fromIndex = findEventFromIndex(details);
+        int toIndex = findEventToIndex(details, fromIndex);
+        String description = details.substring(0, fromIndex).trim();
+        String from = details.substring(fromIndex + 6, toIndex).trim();
+        String to = details.substring(toIndex + 4).trim();
+        validateEventValues(description, from, to);
+
+        String invalidDateMessage = "Invalid event date. Please use yyyy-MM-dd for both dates, "
+                + "for example /from 2019-12-02 /to 2019-12-03.";
+        LocalDate fromDate = parseDate(from, invalidDateMessage);
+        LocalDate toDate = parseDate(to, invalidDateMessage);
+        if (toDate.isBefore(fromDate)) {
+            throw new ChatbotException("An event's end date cannot be before its start date.");
+        }
+        return new Event(description, fromDate, toDate);
+    }
+
+    /** Checks the event argument as a whole before locating its date markers. */
+    private void validateEventOverview(String details) throws ChatbotException {
         if (details.isEmpty()) {
             throw new ChatbotException(
                     "An event needs a description, '/from', and '/to'. "
@@ -172,6 +184,10 @@ public class Parser {
         if (details.equals("/from") || details.startsWith("/from ")) {
             throw new ChatbotException("An event needs a description before '/from'.");
         }
+    }
+
+    /** Returns the single valid {@code /from} marker position. */
+    private int findEventFromIndex(String details) throws ChatbotException {
         int fromIndex = findMarker(details, "/from", 0);
         if (fromIndex < 0) {
             throw new ChatbotException(
@@ -185,6 +201,11 @@ public class Parser {
         if (findMarker(details, "/from", fromIndex + 6) >= 0) {
             throw new ChatbotException("An event accepts only one '/from' date.");
         }
+        return fromIndex;
+    }
+
+    /** Returns the single valid {@code /to} marker position after {@code /from}. */
+    private int findEventToIndex(String details, int fromIndex) throws ChatbotException {
         int toIndex = findMarker(details, "/to", fromIndex + 6);
         if (toIndex < 0) {
             throw new ChatbotException(
@@ -194,9 +215,12 @@ public class Parser {
         if (findMarker(details, "/to", toIndex + 4) >= 0) {
             throw new ChatbotException("An event accepts only one '/to' date.");
         }
-        String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + 6, toIndex).trim();
-        String to = details.substring(toIndex + 4).trim();
+        return toIndex;
+    }
+
+    /** Checks the description and date text extracted from the event arguments. */
+    private void validateEventValues(String description, String from, String to)
+            throws ChatbotException {
         if (description.isEmpty()) {
             throw new ChatbotException("An event needs a description before '/from'.");
         }
@@ -206,14 +230,6 @@ public class Parser {
         if (to.isEmpty()) {
             throw new ChatbotException("An event needs an end date after '/to'.");
         }
-        String invalidDateMessage = "Invalid event date. Please use yyyy-MM-dd for both dates, "
-                + "for example /from 2019-12-02 /to 2019-12-03.";
-        LocalDate fromDate = parseDate(from, invalidDateMessage);
-        LocalDate toDate = parseDate(to, invalidDateMessage);
-        if (toDate.isBefore(fromDate)) {
-            throw new ChatbotException("An event's end date cannot be before its start date.");
-        }
-        return new Event(description, fromDate, toDate);
     }
 
     /**

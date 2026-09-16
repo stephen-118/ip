@@ -18,26 +18,48 @@ public class StorageTest {
      * Runs all storage checks without requiring an external test library.
      *
      * @param args command-line arguments; not used
-     * @throws Exception if setup or persistence unexpectedly fails
+    * @throws Exception if setup or persistence unexpectedly fails
      */
     public static void main(String... args) throws Exception {
+        Path dataFile = prepareDataFile();
+        Storage storage = new Storage(dataFile);
+
+        checkMissingFile(storage, dataFile);
+        checkEmptyFile(storage, dataFile);
+        checkSavingAndUpdatingTasks(storage, dataFile);
+        checkMalformedRecords(storage, dataFile);
+
+        System.out.println("StorageTest: all checks passed");
+    }
+
+    /** Prepares an absent nested data file for the storage checks. */
+    private static Path prepareDataFile() throws Exception {
         Path testRoot = Path.of("out", "storage-test");
         Path nestedDirectory = testRoot.resolve("nested");
         Path dataFile = nestedDirectory.resolve("tasks.txt");
         Files.deleteIfExists(dataFile);
         Files.deleteIfExists(nestedDirectory);
         Files.deleteIfExists(testRoot);
-        Storage storage = new Storage(dataFile);
+        return dataFile;
+    }
 
+    /** Checks that loading a missing file returns an empty list without creating paths. */
+    private static void checkMissingFile(Storage storage, Path dataFile) throws Exception {
         assertTaskData(storage.load(), List.of());
-        if (Files.exists(dataFile) || Files.exists(nestedDirectory)) {
+        if (Files.exists(dataFile) || Files.exists(dataFile.getParent())) {
             throw new AssertionError("Loading a missing file must not create data paths");
         }
+    }
 
-        Files.createDirectories(nestedDirectory);
+    /** Checks that an existing empty file loads as an empty task list. */
+    private static void checkEmptyFile(Storage storage, Path dataFile) throws Exception {
+        Files.createDirectories(dataFile.getParent());
         Files.writeString(dataFile, "", StandardCharsets.UTF_8);
         assertTaskData(storage.load(), List.of());
+    }
 
+    /** Checks serialization, initial saving, updates, and reloading. */
+    private static void checkSavingAndUpdatingTasks(Storage storage, Path dataFile) throws Exception {
         Todo todo = new Todo("read | revise\\notes");
         Deadline deadline = new Deadline("submit report", LocalDate.of(2019, 12, 2));
         Event event = new Event("project meeting",
@@ -64,7 +86,10 @@ public class StorageTest {
         assertTaskData(storage.load(), List.of(
                 "T | 1 | read \\| revise\\\\notes",
                 "E | 0 | project meeting | 2019-12-02 | 2019-12-03"));
+    }
 
+    /** Checks that malformed records are skipped while valid records still load. */
+    private static void checkMalformedRecords(Storage storage, Path dataFile) throws Exception {
         Files.write(dataFile, List.of(
                 "",
                 "not a task",
@@ -80,8 +105,6 @@ public class StorageTest {
                 "T | 0 | valid todo",
                 "D | 1 | valid deadline | 2020-02-29",
                 "E | 1 | valid event | 2019-12-02 | 2019-12-03"));
-
-        System.out.println("StorageTest: all checks passed");
     }
 
     /**
