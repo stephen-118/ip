@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import stephen.gui.MainWindow;
 
-/** Starts Stephen's JavaFX graphical interface. */
+/** Starts Orbit's JavaFX graphical interface. */
 public class Main extends Application {
     private static final Path DATA_FILE = Path.of("data", "stephen.txt");
 
@@ -25,14 +25,14 @@ public class Main extends Application {
 
             Scene scene = new Scene(root, 620, 720);
             scene.getStylesheets().add(getClass().getResource("/css/main.css").toExternalForm());
-            stage.setTitle("Stephen");
+            stage.setTitle("Orbit - Task Mission Control");
             stage.setMinWidth(360);
             stage.setMinHeight(480);
             stage.setScene(scene);
             stage.show();
         } catch (IOException | RuntimeException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Stephen could not start");
+            alert.setTitle("Orbit could not start");
             alert.setHeaderText("The interface could not be loaded.");
             alert.setContentText("Please check that the application resources are present.");
             alert.showAndWait();

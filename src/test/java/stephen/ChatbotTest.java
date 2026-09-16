@@ -22,12 +22,12 @@ class ChatbotTest {
         ChatbotResponse addResponse = chatbot.getResponse("todo read book");
         ChatbotResponse listResponse = chatbot.getResponse("list");
 
-        assertEquals("Got it. I've added this task:\n"
+        assertEquals("Mission logged. I've added this task:\n"
                 + "  [T][ ] read book\n"
-                + "Now you have 1 tasks in the list.", addResponse.message());
+                + "You now have 1 task on the radar.", addResponse.message());
         assertFalse(addResponse.isExit());
         assertFalse(addResponse.isError());
-        assertEquals("Here are the tasks in your list:\n1.[T][ ] read book",
+        assertEquals("Current mission plan:\n1.[T][ ] read book",
                 listResponse.message());
     }
 
@@ -37,7 +37,7 @@ class ChatbotTest {
         ChatbotResponse response = new Chatbot(tempDirectory.resolve("tasks.txt"))
                 .getResponse("unknown");
 
-        assertEquals("Oops! I don't recognise that command.", response.message());
+        assertEquals("Navigation alert: I don't recognise that command.", response.message());
         assertFalse(response.isExit());
         assertTrue(response.isError());
     }
@@ -48,7 +48,7 @@ class ChatbotTest {
         ChatbotResponse response = new Chatbot(tempDirectory.resolve("tasks.txt"))
                 .getResponse("bye");
 
-        assertEquals("Bye. Hope to see you again soon!", response.message());
+        assertEquals("Orbit signing off. Keep moving forward!", response.message());
         assertTrue(response.isExit());
         assertFalse(response.isError());
     }

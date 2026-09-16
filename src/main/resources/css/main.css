@@ -10,12 +10,21 @@
 .app-title {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #172033;
+    -fx-text-fill: #283593;
 }
 
 .app-subtitle {
     -fx-font-size: 12px;
     -fx-text-fill: #68758a;
+}
+
+.status-badge {
+    -fx-background-color: #e7f8f1;
+    -fx-background-radius: 12px;
+    -fx-padding: 4px 9px;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #16835d;
 }
 
 .chat-scroll,
@@ -32,7 +41,7 @@
 }
 
 .user-bubble,
-.stephen-bubble,
+.orbit-bubble,
 .error-bubble {
     -fx-padding: 10px 13px;
     -fx-font-size: 14px;
@@ -40,12 +49,12 @@
 }
 
 .user-bubble {
-    -fx-background-color: #356bd8;
+    -fx-background-color: #4656d9;
     -fx-background-radius: 16px 16px 4px 16px;
     -fx-text-fill: white;
 }
 
-.stephen-bubble {
+.orbit-bubble {
     -fx-background-color: white;
     -fx-background-radius: 16px 16px 16px 4px;
     -fx-text-fill: #243047;
@@ -77,8 +86,8 @@
 }
 
 .text-area:focused {
-    -fx-border-color: #356bd8;
-    -fx-effect: dropshadow(gaussian, rgba(53, 107, 216, 0.18), 5, 0.10, 0, 0);
+    -fx-border-color: #4656d9;
+    -fx-effect: dropshadow(gaussian, rgba(70, 86, 217, 0.18), 5, 0.10, 0, 0);
 }
 
 .text-area .content {
@@ -87,7 +96,7 @@
 }
 
 .button {
-    -fx-background-color: #356bd8;
+    -fx-background-color: #4656d9;
     -fx-background-radius: 9px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -96,11 +105,11 @@
 }
 
 .button:hover {
-    -fx-background-color: #2859bd;
+    -fx-background-color: #3545c0;
 }
 
 .button:pressed {
-    -fx-background-color: #20499d;
+    -fx-background-color: #29379d;
 }
 
 .feedback-label {

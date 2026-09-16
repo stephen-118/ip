@@ -13,9 +13,9 @@ import stephen.task.Task;
 import stephen.task.TaskList;
 import stephen.ui.Ui;
 
-/** Provides Stephen's stateful command-processing logic independently of any input interface. */
+/** Provides Orbit's stateful command-processing logic independently of any input interface. */
 public class Chatbot {
-    private static final String WELCOME_MESSAGE = "Hello! I'm Stephen.\nWhat can I do for you?";
+    private static final String WELCOME_MESSAGE = "Orbit online.\nReady to plan your next move?";
 
     private final Parser parser;
     private final Storage storage;
@@ -32,7 +32,7 @@ public class Chatbot {
         try {
             loadedTasks = storage.load();
         } catch (IOException e) {
-            loadMessage = "\nOops! I couldn't load your tasks. Starting with an empty list.";
+            loadMessage = "\nNavigation alert: I couldn't load your tasks. Starting with an empty list.";
         }
         tasks = new TaskList(loadedTasks);
         startupMessage = WELCOME_MESSAGE + loadMessage;

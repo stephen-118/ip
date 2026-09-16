@@ -32,20 +32,20 @@ public class DialogBox extends HBox {
         return new DialogBox(text, DialogType.USER);
     }
 
-    /** Returns a left-aligned dialog for Stephen's response. */
-    public static DialogBox getStephenDialog(String text) {
-        return getStephenDialog(text, false);
+    /** Returns a left-aligned dialog for Orbit's response. */
+    public static DialogBox getOrbitDialog(String text) {
+        return getOrbitDialog(text, false);
     }
 
     /** Returns a left-aligned response, using a distinct style when it reports an error. */
-    public static DialogBox getStephenDialog(String text, boolean isError) {
-        return new DialogBox(text, isError ? DialogType.ERROR : DialogType.STEPHEN);
+    public static DialogBox getOrbitDialog(String text, boolean isError) {
+        return new DialogBox(text, isError ? DialogType.ERROR : DialogType.ORBIT);
     }
 
     /** Identifies the alignment and visual style of a message. */
     private enum DialogType {
         USER("user-bubble"),
-        STEPHEN("stephen-bubble"),
+        ORBIT("orbit-bubble"),
         ERROR("error-bubble");
 
         private final String styleClass;

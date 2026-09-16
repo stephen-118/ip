@@ -1,6 +1,6 @@
-# Stephen task chatbot
+# Orbit task chatbot
 
-Stephen is a task-management chatbot with both a command-line interface and a JavaFX graphical interface.
+Orbit is a calm, mission-control-themed task chatbot with command-line and JavaFX interfaces.
 
 ## Setting up in Intellij
 
@@ -39,8 +39,8 @@ Run the original command-line interface:
 If the setup is correct, the CLI starts with:
 
 ```text
-Hello! I'm Stephen.
-What can I do for you?
+Orbit online.
+Ready to plan your next move?
 ```
 
 The standalone JavaFX learning/setup check is retained separately and can be launched with:

@@ -12,7 +12,7 @@ import stephen.task.Task;
 import stephen.task.TaskList;
 import stephen.ui.Ui;
 
-/** Starts and coordinates the Stephen task-management chatbot. */
+/** Starts and coordinates the Orbit task-management chatbot. */
 public class Stephen {
     private static final Path DATA_FILE = Path.of("data", "stephen.txt");
 

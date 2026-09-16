@@ -7,7 +7,7 @@ import java.util.Scanner;
 import stephen.task.Task;
 import stephen.task.TaskList;
 
-/** Reads user input and displays all console output for Stephen. */
+/** Reads user input and presents responses in Orbit's mission-control voice. */
 public class Ui {
     private static final String DIVIDER = "\n________________________________________________";
     private final Scanner scanner;
@@ -37,15 +37,15 @@ public class Ui {
 
     /** Displays the startup greeting and its trailing divider. */
     public void showWelcome() {
-        showLine("Hello! I'm Stephen.");
-        showLine("What can I do for you?");
+        showLine("Orbit online.");
+        showLine("Ready to plan your next move?");
         showDivider();
     }
 
     /** Displays the farewell between divider lines. */
     public void showGoodbye() {
         showDivider();
-        showLine("Bye. Hope to see you again soon!");
+        showLine("Orbit signing off. Keep moving forward!");
         showDivider();
     }
 
@@ -55,7 +55,7 @@ public class Ui {
      * @param message error message without the standard prefix
      */
     public void showError(String message) {
-        showLine("Oops! " + message);
+        showLine("Navigation alert: " + message);
     }
 
     /**
@@ -64,7 +64,7 @@ public class Ui {
      * @param tasks task list to display
      */
     public void showTaskList(TaskList tasks) {
-        showLine("Here are the tasks in your list:");
+        showLine("Current mission plan:");
         showNumberedTasks(tasks);
     }
 
@@ -74,7 +74,7 @@ public class Ui {
      * @param tasks sorted task list to display
      */
     public void showTasksSorted(TaskList tasks) {
-        showLine("I've sorted your tasks alphabetically:");
+        showLine("Mission plan sorted alphabetically:");
         showNumberedTasks(tasks);
     }
 
@@ -92,9 +92,9 @@ public class Ui {
      * @param taskCount number of tasks after the addition
      */
     public void showTaskAdded(Task task, int taskCount) {
-        showLine("Got it. I've added this task:");
+        showLine("Mission logged. I've added this task:");
         showLine("  " + task);
-        showLine("Now you have " + taskCount + " tasks in the list.");
+        showRadarTaskCount(taskCount);
     }
 
     /**
@@ -104,9 +104,15 @@ public class Ui {
      * @param taskCount number of tasks after the deletion
      */
     public void showTaskDeleted(Task task, int taskCount) {
-        showLine("Noted. I've removed this task:");
+        showLine("Course adjusted. I've removed this task:");
         showLine("  " + task);
-        showLine("Now you have " + taskCount + " tasks in the list.");
+        showRadarTaskCount(taskCount);
+    }
+
+    /** Displays the task count with grammatically correct singular or plural wording. */
+    private void showRadarTaskCount(int taskCount) {
+        String taskNoun = taskCount == 1 ? "task" : "tasks";
+        showLine("You now have " + taskCount + " " + taskNoun + " on the radar.");
     }
 
     /**
@@ -117,9 +123,9 @@ public class Ui {
      */
     public void showTaskMarked(Task task, boolean isDone) {
         if (isDone) {
-            showLine("Nice! I've marked this task as done:");
+            showLine("Milestone reached! This task is complete:");
         } else {
-            showLine("OK, I've marked this task as not done yet:");
+            showLine("Task reopened. It's back on the radar:");
         }
         showLine(task.toString());
     }
@@ -135,7 +141,7 @@ public class Ui {
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).occursOn(date)) {
                 if (!hasMatches) {
-                    showLine("Here are the tasks occurring on "
+                    showLine("On the radar for "
                             + date.format(Task.DISPLAY_DATE_FORMAT) + ":");
                     hasMatches = true;
                 }
@@ -143,7 +149,7 @@ public class Ui {
             }
         }
         if (!hasMatches) {
-            showLine("There are no deadlines or events on "
+            showLine("Clear skies - no deadlines or events on "
                     + date.format(Task.DISPLAY_DATE_FORMAT) + ".");
         }
     }
@@ -156,10 +162,11 @@ public class Ui {
      */
     public void showFindResults(List<Task> matches, String keyword) {
         if (matches.isEmpty()) {
-            showLine("There are no tasks matching \"" + keyword + "\".");
+            showLine("Scan clear - no tasks match \"" + keyword + "\".");
             return;
         }
-        showLine("Here are the " + matches.size() + " matching tasks:");
+        String taskNoun = matches.size() == 1 ? "task" : "tasks";
+        showLine("Scan found " + matches.size() + " matching " + taskNoun + ":");
         for (int i = 0; i < matches.size(); i++) {
             showLine((i + 1) + "." + matches.get(i));
         }

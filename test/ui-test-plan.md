@@ -26,20 +26,20 @@
 **Expected output:**
 
 ```text
-Hello! I'm Stephen.
-What can I do for you?
+Orbit online.
+Ready to plan your next move?
 
 ________________________________________________
 
 ________________________________________________
-Got it. I've added this task:
+Mission logged. I've added this task:
   [T][ ] read book
-Now you have 1 tasks in the list.
+You now have 1 task on the radar.
 
 ________________________________________________
 
 ________________________________________________
-Bye. Hope to see you again soon!
+Orbit signing off. Keep moving forward!
 
 ________________________________________________
 ```
@@ -70,7 +70,7 @@ ________________________________________________
 **Expected output:** The three normal add confirmations have counts 1, 2, and 3. The list section is exactly:
 
 ```text
-Here are the tasks in your list:
+Current mission plan:
 1.[T][ ] read book
 2.[D][ ] return book (by: Dec 2 2019)
 3.[E][ ] project meeting (from: Dec 2 2019 to: Dec 3 2019)
@@ -87,7 +87,7 @@ The normal greeting, separators, and farewell surround the interactions as recor
 **Expected output:** After the normal add response, the mark response is exactly:
 
 ```text
-Nice! I've marked this task as done:
+Milestone reached! This task is complete:
 [T][X] read book
 ```
 
@@ -100,7 +100,7 @@ Nice! I've marked this task as done:
 **Expected output:** After the add and mark responses, the unmark response is exactly:
 
 ```text
-OK, I've marked this task as not done yet:
+Task reopened. It's back on the radar:
 [T][ ] read book
 ```
 
@@ -111,7 +111,7 @@ OK, I've marked this task as not done yet:
 **Inputs:** `deadline submit report /by sometime after lunch-ish`, then `bye`.
 
 **Expected output:** The invalid date is rejected with
-`Oops! Invalid deadline date. Please use yyyy-MM-dd, for example 2019-12-02.`;
+`Navigation alert: Invalid deadline date. Please use yyyy-MM-dd, for example 2019-12-02.`;
 the application then processes `bye` normally.
 
 ## LEVEL4-08 — Reject a nonexistent event date
@@ -134,11 +134,11 @@ is recorded in `test/ui-test-cases.json` and includes missing descriptions and d
 empty date/time values, missing/non-numeric/zero/negative/out-of-range task numbers, and
 successful add, mark, unmark, and delete operations.
 
-**Expected output:** Every invalid command prints an `Oops!` message and the next command is
+**Expected output:** Every invalid command prints a `Navigation alert:` message and the next command is
 still processed. The final list contains only the two valid tasks that were not deleted:
 
 ```text
-Here are the tasks in your list:
+Current mission plan:
 1.[D][ ] return book (by: Dec 2 2019)
 2.[E][ ] meeting (from: Dec 2 2019 to: Dec 3 2019)
 ```
@@ -192,12 +192,12 @@ date are excluded. Displayed numbers remain the tasks' original list numbers.
 **Initial data:** A Todo, two Deadlines on different dates, and a multi-day Event.
 
 **Expected output:** The matching Deadline and Event are shown under the friendly date
-heading `Here are the tasks occurring on Dec 2 2019:`.
+heading `On the radar for Dec 2 2019:`.
 
 ## LEVEL8-STRETCH-02 — Show an empty schedule
 
 **Aim:** Verify that a valid date with no matching deadlines or events displays the clear
-message `There are no deadlines or events on Dec 5 2019.`.
+message `Clear skies - no deadlines or events on Dec 5 2019.`.
 
 ## LEVEL8-STRETCH-03 — Reject an invalid schedule date
 
@@ -216,9 +216,9 @@ task is displayed only once.
 **Inputs:** Search for `groceries`, `book`, `READ BOOK`, and `missing phrase`; then enter
 `find` without a keyword and `bye`.
 
-**Expected output:** Successful searches show `Here are the N matching tasks:` followed
+**Expected output:** Successful searches show `Scan found N matching task(s):` followed
 by numbered task lines in their original order. The missing phrase reports no matches.
-The empty search prints `Oops! Please provide a search keyword. Try: find book` and the
+The empty search prints `Navigation alert: Please provide a search keyword. Try: find book` and the
 application continues to process `bye`.
 
 ## Level 10 JavaFX GUI coverage
@@ -231,8 +231,8 @@ the existing `bye` exit signal.
 The JavaFX setup and production-window behavior require a graphical environment and are checked
 manually. The smoke test covers FXML/controller/CSS loading, startup, Send and Enter submission,
 empty-input prevention, consecutive messages and scrolling, Shift+Enter multiline input,
-resizing, and the `bye` close behavior. Existing CLI expectations in
-`test/ui-test-cases.json` remain unchanged because Level 10 preserves the console interface.
+resizing, and the `bye` close behavior. The exact CLI expectations in
+`test/ui-test-cases.json` also verify Orbit's mission-control response language.
 
 ## C-SORT-01 — Sort tasks alphabetically and persist their order
 

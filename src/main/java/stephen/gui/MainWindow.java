@@ -14,7 +14,7 @@ import javafx.util.Duration;
 import stephen.Chatbot;
 import stephen.ChatbotResponse;
 
-/** Controls Stephen's main chat window. */
+/** Controls Orbit's main chat window. */
 public class MainWindow {
     @FXML
     private ScrollPane scrollPane;
@@ -45,7 +45,7 @@ public class MainWindow {
     /** Injects the chatbot and displays its startup message. */
     public void setChatbot(Chatbot chatbot) {
         this.chatbot = chatbot;
-        dialogContainer.getChildren().add(DialogBox.getStephenDialog(chatbot.getStartupMessage()));
+        dialogContainer.getChildren().add(DialogBox.getOrbitDialog(chatbot.getStartupMessage()));
     }
 
     /** Sends the current non-empty input through the chatbot. */
@@ -61,7 +61,7 @@ public class MainWindow {
         ChatbotResponse response = chatbot.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input),
-                DialogBox.getStephenDialog(response.message(), response.isError()));
+                DialogBox.getOrbitDialog(response.message(), response.isError()));
         feedbackLabel.setText("");
         userInput.clear();
         userInput.requestFocus();
@@ -70,7 +70,7 @@ public class MainWindow {
         if (response.isExit()) {
             userInput.setDisable(true);
             sendButton.setDisable(true);
-            feedbackLabel.setText("Closing Stephen...");
+            feedbackLabel.setText("Orbit signing off...");
             PauseTransition delay = new PauseTransition(Duration.millis(700));
             delay.setOnFinished(event -> Platform.exit());
             delay.play();

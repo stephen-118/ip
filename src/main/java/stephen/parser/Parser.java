@@ -22,7 +22,7 @@ import stephen.task.Todo;
 
 /** Interprets user input and validates command arguments. */
 public class Parser {
-    /** Creates a parser for Stephen's supported commands. */
+    /** Creates a parser for Orbit's supported commands. */
     public Parser() {
     }
 
