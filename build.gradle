@@ -63,7 +63,7 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'stephen.jar'
+    archiveFileName = 'orbit.jar'
 
     manifest {
         attributes 'Main-Class': application.mainClass.get()

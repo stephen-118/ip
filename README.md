@@ -2,6 +2,8 @@
 
 Orbit is a calm, mission-control-themed task chatbot with command-line and JavaFX interfaces.
 
+See the [Orbit User Guide](docs/README.md) for the complete command reference.
+
 ## Setting up in Intellij
 
 Prerequisites: JDK 25, update Intellij to the most recent version.
@@ -30,7 +32,7 @@ Launch the JavaFX GUI:
 
 The input box supports Enter to send and Shift+Enter to insert a new line.
 
-Run the original command-line interface:
+Run the command-line interface:
 
 ```powershell
 .\gradlew.bat runCli
@@ -85,3 +87,14 @@ Run the exact-output command-line UI tests after compiling:
 Enter `find KEYWORD` to display tasks whose descriptions contain the keyword or phrase.
 Matching is case-insensitive. For example, `find read book` finds a task described as
 `Read Book`.
+
+## Acknowledgements
+
+- The project author used **OpenAI Codex** throughout the project for brainstorming,
+  implementation assistance, refactoring, test generation, documentation, and code review.
+  All generated suggestions were reviewed and adapted before being included.
+- The project is based on the SE-EDU individual-project starter and course materials.
+- [OpenJFX](https://openjfx.io/) provides the JavaFX graphical interface.
+- [JUnit 5](https://junit.org/junit5/) provides the automated testing framework.
+- The Gradle Shadow plugin packages the executable JAR, while Checkstyle enforces the
+  project's Java coding standard.
