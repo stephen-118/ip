@@ -252,6 +252,22 @@ handled safely. The final list contains only that Todo. Exact output is recorded
 Storage tests additionally verify that missing files are harmless, malformed and reversed
 saved records are skipped, and an unusable save destination raises a recoverable I/O error.
 
+## A-MORE-TESTING — Expanded automated coverage
+
+JUnit tests cover the remaining automatable behavior outside the JavaFX window:
+
+- `CommandExecutionTest` verifies modifying-command persistence, read-only command delegation,
+  exit signaling, and conversion of save failures into `ChatbotException` messages.
+- `UiTest` verifies command input trimming and every console-output branch for session, task,
+  schedule, and search messages, including singular, plural, matching, and empty results.
+- `TaskTest` verifies status transitions, escaped save data, formatted dated tasks, and rejection
+  of null or reversed event dates.
+- `ChatbotTest` verifies both normal startup and recovery when the data path cannot be read.
+
+JavaFX stage rendering, resizing, keyboard shortcuts, automatic scrolling, and visual styling
+remain in the manual smoke test because they require a graphical environment. They should be
+checked at the minimum and default window sizes on the target OS.
+
 ## C-SORT-01 — Sort tasks alphabetically and persist their order
 
 **Aim:** Verify that `sort` orders mixed task types by description without regard to

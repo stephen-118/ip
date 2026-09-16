@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,28 @@ import org.junit.jupiter.api.io.TempDir;
 class ChatbotTest {
     @TempDir
     Path tempDirectory;
+
+    /** Verifies the normal graphical-interface startup message. */
+    @Test
+    void getStartupMessageReadableStorageReturnsOrbitGreeting() {
+        Chatbot chatbot = new Chatbot(tempDirectory.resolve("tasks.txt"));
+
+        assertEquals("Orbit online.\nReady to plan your next move?",
+                chatbot.getStartupMessage());
+    }
+
+    /** Verifies that an unreadable data path produces a recoverable startup notice. */
+    @Test
+    void getStartupMessageUnreadableStorageReturnsRecoveryNotice() throws IOException {
+        Path directoryAsFile = tempDirectory.resolve("tasks.txt");
+        Files.createDirectory(directoryAsFile);
+
+        Chatbot chatbot = new Chatbot(directoryAsFile);
+
+        assertEquals("Orbit online.\nReady to plan your next move?\n"
+                + "Navigation alert: I couldn't load your tasks. Starting with an empty list.",
+                chatbot.getStartupMessage());
+    }
 
     /** Verifies stateful command execution and clean response text. */
     @Test
