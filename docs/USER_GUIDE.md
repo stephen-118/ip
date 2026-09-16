@@ -3,6 +3,8 @@
 Orbit is a mission-control-themed task manager. It accepts short text commands through
 either its JavaFX window or command-line interface and saves successful changes automatically.
 
+![Orbit task manager interface](Ui.png)
+
 ## Quick start
 
 1. Start Orbit using `./gradlew run` on macOS/Linux or `.\gradlew.bat run` on Windows.
